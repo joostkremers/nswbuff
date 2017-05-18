@@ -84,7 +84,7 @@
   :prefix "nswbuff-")
 
 (defcustom nswbuff-status-window-layout nil
-  "*Method used to ensure the switched buffer is always visible.
+  "Method used to ensure the switched buffer is always visible.
 This occurs when the buffer list is larger than the status window
 width.  The possible choices are:
 
@@ -100,12 +100,12 @@ width.  The possible choices are:
                  (const :tag "Adjust"  adjust)))
 
 (defcustom nswbuff-clear-delay 3
-  "*Time in seconds to delay before discarding the status window."
+  "Time in seconds to delay before discarding the status window."
   :group 'nswbuff
   :type '(number :tag "seconds"))
 
 (defcustom nswbuff-clear-delay-ends-switching nil
-  "*Should switching end after the clear-delay expired?
+  "Should switching end after the clear-delay expired?
 If nil, you stay in switching mode and the selected buffer does not
 count as used just because the status window disappeared after the
 timeout.  But if you prefer so set it to t."
@@ -113,7 +113,7 @@ timeout.  But if you prefer so set it to t."
   :type 'boolean)
 
 (defcustom nswbuff-display-original-buffer-first t
-  "*Should the old buffer be first in the list?
+  "Should the old buffer be first in the list?
 If non-nil, the buffer where switching started will be the leftmost in
 the list.  Otherwise it will be the buffer the first command switched
 to."
@@ -121,7 +121,7 @@ to."
   :type 'boolean)
 
 (defcustom nswbuff-recent-buffers-first t
-  "*Show recent buffers first?
+  "Show recent buffers first?
 If non-nil the buffer list is sorted by how recently the buffers were
 used.  If nil, it is as a cyclic list with fixed order.  Note that
 other commands (switch-to-buffer) still change the order."
@@ -129,39 +129,39 @@ other commands (switch-to-buffer) still change the order."
   :type 'boolean)
 
 (defcustom nswbuff-separator ", "
-  "*String used to separate buffer names in the status line."
+  "String used to separate buffer names in the status line."
   :group 'nswbuff
   :type 'string)
 
 (defcustom nswbuff-header ""
-  "*Status line header string."
+  "Status line header string."
   :group 'nswbuff
   :type 'string)
 
 (defcustom nswbuff-trailer ""
-  "*Status line trailer string."
+  "Status line trailer string."
   :group 'nswbuff
   :type 'string)
 
 (defcustom nswbuff-window-min-text-height 1
-  "*Minimum text height of the status window."
+  "Minimum text height of the status window."
   :group 'nswbuff
   :type 'integer)
 
 (defface nswbuff-default-face '((t nil))
-  "*Default face used for buffer names."
+  "Default face used for buffer names."
   :group 'nswbuff)
 
 (defface nswbuff-current-buffer-face '((t (:foreground "red" :bold t :underline t)))
-  "*Face used to highlight the current buffer name."
+  "Face used to highlight the current buffer name."
   :group 'nswbuff)
 
 (defface nswbuff-separator-face '((t (:foreground "blue")))
-  "*Face used for separators."
+  "Face used for separators."
   :group 'nswbuff)
 
 (defcustom nswbuff-exclude-buffer-regexps '("^ ")
-  "*List of regular expressions for excluded buffers.
+  "List of regular expressions for excluded buffers.
 The default setting excludes buffers whose name begin with a blank
 character.  To exclude all the internal buffers (that is *scratch*,
 *Message*, etc...) you could use the following regexps:
