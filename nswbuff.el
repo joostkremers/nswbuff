@@ -161,9 +161,9 @@ other commands (switch-to-buffer) still change the order."
 
 (defcustom nswbuff-exclude-buffer-regexps '("^ ")
   "List of regular expressions for excluded buffers.
-The default setting excludes buffers whose name begin with a blank
-character.  To exclude all the internal buffers (that is *scratch*,
-*Message*, etc...) you could use the following regexps:
+The default setting excludes buffers whose name begin with a
+blank character.  To exclude all the internal buffers (that is
+*scratch*, *Message*, etc...) use the following regexps:
   (\"^ \" \"^\\*.*\\*\")."
   :group 'nswbuff
   :type '(repeat (regexp :format "%v")))
