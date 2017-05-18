@@ -127,7 +127,7 @@ other commands (switch-to-buffer) still change the order."
   :group 'nswbuff
   :type 'boolean)
 
-(defcustom nswbuff-separator ", "
+(defcustom nswbuff-separator " | "
   "String used to separate buffer names in the status line."
   :group 'nswbuff
   :type 'string)
