@@ -1,15 +1,17 @@
-;;; swbuff.el --- Quick switch between Emacs buffers.
+;;; nswbuff.el --- Quick switching between Emacs buffers.
 
 ;; Copyright (C) 1998, 2000, 2001, 2003, 2004 by David Ponce
+;; Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+;; Copyright (C) 2017 Joost Kremers
 
 ;; Author: David Ponce <david@dponce.com>
-;; Maintainer: David Ponce <david@dponce.com>
-;; Created: 12 Nov 1998
+;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
+;; Created: 18 May 2017
 ;; Keywords: extensions convenience
-;; Package-Version: 20160824.707
+;; Package-Version: 1.0
 ;; Revision: $Id$
 
-(defconst swbuff-version "3.3")
+(defconst nswbuff-version "1.0")
 
 ;; This file is not part of Emacs
 
@@ -30,11 +32,11 @@
 
 ;;; Commentary:
 ;;
-;; This package provides the commands `swbuff-switch-to-next-buffer'
-;; and `swbuff-switch-to-previous-buffer' to respectively switch to
+;; This package provides the commands `nswbuff-switch-to-next-buffer'
+;; and `nswbuff-switch-to-previous-buffer' to respectively switch to
 ;; the next or previous buffer in the buffer list.
 ;;
-;; The `swbuff-exclude-buffer-regexps' defines a list of regular
+;; The `nswbuff-exclude-buffer-regexps' defines a list of regular
 ;; expressions for excluded buffers.  The default setting excludes
 ;; buffers whose name begin with a blank character.  To exclude all the
 ;; internal buffers (that is *scratch*, *Message*, etc...) you could
@@ -43,27 +45,27 @@
 ;; Switching buffers pops-up a status window at the bottom of the
 ;; selected window.  The status window shows the list of switchable
 ;; buffers where the switched one is hilighted using
-;; `swbuff-current-buffer-face'.  This window is automatically
+;; `nswbuff-current-buffer-face'.  This window is automatically
 ;; discarded after any command is executed or after the delay
-;; specified by `swbuff-clear-delay'.
+;; specified by `nswbuff-clear-delay'.
 ;;
 ;; The bufferlist is sorted by how recently the buffers were used.  If
-;; you prefer a fixed (cyclic) order set `swbuff-recent-buffers-first'
+;; you prefer a fixed (cyclic) order set `nswbuff-recent-buffers-first'
 ;; to nil.
 ;;
 ;; When the status window disappears because of the clear-delay you
 ;; still stay in switching mode.  The timeout is only a visual
 ;; thing.  If you want it to have the same effect as using the buffer,
-;; set `swbuff-clear-delay-ends-switching' to t.
+;; set `nswbuff-clear-delay-ends-switching' to t.
 ;;
 ;; The leftmost item in the status window is the active buffer before
 ;; switching started.  If you want the buffer /after/ switching started
-;; there, set `swbuff-display-original-buffer-first' to nil.
+;; there, set `nswbuff-display-original-buffer-first' to nil.
 ;;
 ;; To install and use, put this file on your Emacs-Lisp load path and
 ;; add the following into your ~/.emacs startup file:
 ;;
-;; (require 'swbuff)
+;; (require 'nswbuff)
 ;;
 
 ;;; History:
@@ -74,13 +76,13 @@
 
 ;;; Options
 ;;
-(defgroup swbuff nil
-  "Quick switch between Emacs buffers."
+(defgroup nswbuff nil
+  "Quick switching between Emacs buffers."
   :group 'extensions
   :group 'convenience
-  :prefix "swbuff-")
+  :prefix "nswbuff-")
 
-(defcustom swbuff-status-window-layout nil
+(defcustom nswbuff-status-window-layout nil
   "*Method used to ensure the switched buffer is always visible.
 This occurs when the buffer list is larger than the status window
 width.  The possible choices are:
@@ -91,109 +93,109 @@ width.  The possible choices are:
               Otherwise horizontal scrolling is used.
 - - 'Scroll'  Horizontal scrolling is always used.
 - - 'Adjust'  Only adjust the window height."
-  :group 'swbuff
+  :group 'nswbuff
   :type '(choice (const :tag "Default" nil)
                  (const :tag "Scroll"  scroll)
                  (const :tag "Adjust"  adjust)))
 
-(defcustom swbuff-clear-delay 3
+(defcustom nswbuff-clear-delay 3
   "*Time in seconds to delay before discarding the status window."
-  :group 'swbuff
+  :group 'nswbuff
   :type '(number :tag "seconds"))
 
-(defcustom swbuff-clear-delay-ends-switching nil
+(defcustom nswbuff-clear-delay-ends-switching nil
   "*Should switching end after the clear-delay expired?
 If nil, you stay in switching mode and the selected buffer does not
 count as used just because the status window disappeared after the
 timeout.  But if you prefer so set it to t."
-  :group 'swbuff
+  :group 'nswbuff
   :type 'boolean)
 
-(defcustom swbuff-display-original-buffer-first t
+(defcustom nswbuff-display-original-buffer-first t
   "*Should the old buffer be first in the list?
 If non-nil, the buffer where switching started will be the leftmost in
 the list.  Otherwise it will be the buffer the first command switched
 to."
-  :group 'swbuff
+  :group 'nswbuff
   :type 'boolean)
 
-(defcustom swbuff-recent-buffers-first t
+(defcustom nswbuff-recent-buffers-first t
   "*Show recent buffers first?
 If non-nil the buffer list is sorted by how recently the buffers were
 used.  If nil, it is as a cyclic list with fixed order.  Note that
 other commands (switch-to-buffer) still change the order."
-  :group 'swbuff
+  :group 'nswbuff
   :type 'boolean)
 
-(defcustom swbuff-separator ", "
+(defcustom nswbuff-separator ", "
   "*String used to separate buffer names in the status line."
-  :group 'swbuff
+  :group 'nswbuff
   :type 'string)
 
-(defcustom swbuff-header ""
+(defcustom nswbuff-header ""
   "*Status line header string."
-  :group 'swbuff
+  :group 'nswbuff
   :type 'string)
 
-(defcustom swbuff-trailer ""
+(defcustom nswbuff-trailer ""
   "*Status line trailer string."
-  :group 'swbuff
+  :group 'nswbuff
   :type 'string)
 
-(defcustom swbuff-window-min-text-height 1
+(defcustom nswbuff-window-min-text-height 1
   "*Minimum text height of the status window."
-  :group 'swbuff
+  :group 'nswbuff
   :type 'integer)
 
-(defface swbuff-default-face '((t nil))
+(defface nswbuff-default-face '((t nil))
   "*Default face used for buffer names."
-  :group 'swbuff)
+  :group 'nswbuff)
 
-(defface swbuff-current-buffer-face '((t (:foreground "red" :bold t :underline t)))
+(defface nswbuff-current-buffer-face '((t (:foreground "red" :bold t :underline t)))
   "*Face used to highlight the current buffer name."
-  :group 'swbuff)
+  :group 'nswbuff)
 
-(defface swbuff-separator-face '((t (:foreground "blue")))
+(defface nswbuff-separator-face '((t (:foreground "blue")))
   "*Face used for separators."
-  :group 'swbuff)
+  :group 'nswbuff)
 
-(defcustom swbuff-exclude-buffer-regexps '("^ ")
+(defcustom nswbuff-exclude-buffer-regexps '("^ ")
   "*List of regular expressions for excluded buffers.
 The default setting excludes buffers whose name begin with a blank
 character.  To exclude all the internal buffers (that is *scratch*,
 *Message*, etc...) you could use the following regexps:
   (\"^ \" \"^\\*.*\\*\")."
-  :group 'swbuff
+  :group 'nswbuff
   :type '(repeat (regexp :format "%v")))
 
-(defcustom swbuff-load-hook '(swbuff-default-load-hook)
+(defcustom nswbuff-load-hook '(nswbuff-default-load-hook)
   "Hook run when package has been loaded.
-See also `swbuff-default-load-hook'."
-  :group 'swbuff
+See also `nswbuff-default-load-hook'."
+  :group 'nswbuff
   :type 'hook)
 
 ;;; Internals
 ;;
-(defconst swbuff-status-buffer-name "*swbuff*"
+(defconst nswbuff-status-buffer-name "*nswbuff*"
   "Name of the working buffer used to display the buffer list.")
 
-(defun swbuff-include-p (name)
+(defun nswbuff-include-p (name)
   "Return non-nil if buffer NAME can be included.
-That is if NAME matches none of the `swbuff-exclude-buffer-regexps'."
-  (let ((rl (cons (regexp-quote swbuff-status-buffer-name)
-                  swbuff-exclude-buffer-regexps)))
+That is if NAME matches none of the `nswbuff-exclude-buffer-regexps'."
+  (let ((rl (cons (regexp-quote nswbuff-status-buffer-name)
+                  nswbuff-exclude-buffer-regexps)))
     (while (and rl (not (string-match (car rl) name)))
       (setq rl (cdr rl)))
     (null rl)))
 
-(defun swbuff-buffer-list ()
+(defun nswbuff-buffer-list ()
   "Return the list of switchable buffers.
 That is without the ones whose name matches
-`swbuff-exclude-buffer-regexps'."
+`nswbuff-exclude-buffer-regexps'."
   (let ((blist (delq nil
                      (mapcar (function
                               (lambda (buf)
-                                (and (swbuff-include-p (buffer-name buf))
+                                (and (nswbuff-include-p (buffer-name buf))
                                      buf)))
                              (buffer-list)))))
     (or (memq (current-buffer) blist)
@@ -201,8 +203,8 @@ That is without the ones whose name matches
     blist))
 
 (if (fboundp 'count-lines)
-    (defalias 'swbuff-count-lines 'count-lines)
-  (defun swbuff-count-lines (start end)
+    (defalias 'nswbuff-count-lines 'count-lines)
+  (defun nswbuff-count-lines (start end)
     "Return number of lines between START and END.
 This is usually the number of newlines between them,
 but can be one more if START is not equal to END
@@ -225,19 +227,19 @@ and the greater of them is not at the start of a line."
                   done)))
           (- (buffer-size) (forward-line (buffer-size))))))))
 
-(defun swbuff-window-lines ()
+(defun nswbuff-window-lines ()
   "Return the number of lines in current buffer.
 This number may be greater than the number of actual lines in the
 buffer if any wrap on the display due to their length."
-  (swbuff-count-lines (point-min) (point-max)))
+  (nswbuff-count-lines (point-min) (point-max)))
 
-(defun swbuff-adjust-window (&optional text-height)
+(defun nswbuff-adjust-window (&optional text-height)
   "Adjust window height to fit its buffer contents.
 If optional TEXT-HEIGHT is non-nil adjust window height to this
 value."
-  (setq text-height (max swbuff-window-min-text-height
+  (setq text-height (max nswbuff-window-min-text-height
                          (or text-height
-                             (swbuff-window-lines))))
+                             (nswbuff-window-lines))))
   (if (fboundp 'set-window-text-height)
       (set-window-text-height nil text-height)
     (let ((height (window-height))
@@ -246,7 +248,7 @@ value."
   (goto-char (point-min)))
 
 ;; Used to prevent discarding the status window on some mouse event.
-(defalias 'swbuff-ignore 'ignore)
+(defalias 'nswbuff-ignore 'ignore)
 
 ;;; Compatibility
 (cond
@@ -254,7 +256,7 @@ value."
  ((and (not (featurep 'xemacs))
        (> emacs-major-version 20))
 
-  (defun swbuff-scroll-window (position)
+  (defun nswbuff-scroll-window (position)
     "Adjust horizontal scrolling to ensure that POSITION is visible."
     (setq truncate-lines t)
     (let ((automatic-hscrolling t))
@@ -265,26 +267,26 @@ value."
   ;; kill the current buffer.
   (let ((map mode-line-buffer-identification-keymap))
     (define-key map [mode-line mouse-1]
-      'swbuff-switch-to-previous-buffer)
+      'nswbuff-switch-to-previous-buffer)
     (define-key map [mode-line drag-mouse-1]
-      'swbuff-ignore)
+      'nswbuff-ignore)
     (define-key map [mode-line down-mouse-1]
-      'swbuff-ignore)
+      'nswbuff-ignore)
     (define-key map [mode-line mouse-2]
-      'swbuff-kill-this-buffer)
+      'nswbuff-kill-this-buffer)
     (define-key map [mode-line mouse-3]
-      'swbuff-switch-to-next-buffer))
+      'nswbuff-switch-to-next-buffer))
 
   )
 
  ;; GNU Emacs 20 or XEmacs
  (t
 
-  (defconst swbuff-extra-space 3
+  (defconst nswbuff-extra-space 3
     "Extra space left in a line of the status window.
 The default value correspond to the truncated glyphs + one space.")
 
-  (defun swbuff-scroll-window (position)
+  (defun nswbuff-scroll-window (position)
     "Adjust horizontal scrolling to ensure that POSITION is visible."
     (setq truncate-lines t)
     ;; Don't display the XEmacs horizontal scrollbar
@@ -294,13 +296,13 @@ The default value correspond to the truncated glyphs + one space.")
       (if (featurep 'xemacs)
           (set-specifier horizontal-scrollbar-visible-p nil window))
       (if (>= position (+ wdth hscr))
-          (set-window-hscroll window (- (+ position swbuff-extra-space) wdth))
+          (set-window-hscroll window (- (+ position nswbuff-extra-space) wdth))
         (if (< position hscr)
-            (set-window-hscroll window (- position swbuff-extra-space))))))
+            (set-window-hscroll window (- position nswbuff-extra-space))))))
 
   ))
 
-(defun swbuff-one-window-p (window)
+(defun nswbuff-one-window-p (window)
   "Return non-nil if there is only one window in this frame.
 Ignore WINDOW and the minibuffer window."
   (let ((count 0))
@@ -308,20 +310,20 @@ Ignore WINDOW and the minibuffer window."
                       (or (eq w window) (setq count (1+ count)))))
     (= count 1)))
 
-(defvar swbuff-buffer-list-holder nil
+(defvar nswbuff-buffer-list-holder nil
   "Hold the current displayed buffer list.")
 
-(defun swbuff-layout-status-line (window bcurr)
+(defun nswbuff-layout-status-line (window bcurr)
   "Layout a status line in WINDOW current buffer.
 BCURR is the buffer name to highlight."
-  (let ((blist  swbuff-buffer-list-holder)
-        (head   (or swbuff-header    "" ))
-        (separ  (or swbuff-separator " "))
-        (trail  (or swbuff-trailer   "" ))
+  (let ((blist  nswbuff-buffer-list-holder)
+        (head   (or nswbuff-header    "" ))
+        (separ  (or nswbuff-separator " "))
+        (trail  (or nswbuff-trailer   "" ))
         (width  (window-width window))
         (lines  0)
-        (adjust (or (eq swbuff-status-window-layout 'adjust)
-                    (swbuff-one-window-p window)))
+        (adjust (or (eq nswbuff-status-window-layout 'adjust)
+                    (nswbuff-one-window-p window)))
         start end buffer bname fillr)
     (save-selected-window
       (select-window window)
@@ -331,7 +333,7 @@ BCURR is the buffer name to highlight."
       (insert head)
       (if (> (point) start)
           (set-text-properties
-           start (point) '(face swbuff-separator-face)))
+           start (point) '(face nswbuff-separator-face)))
       (while blist
         (setq buffer (car blist)
               blist  (cdr blist))
@@ -351,97 +353,97 @@ BCURR is the buffer name to highlight."
            ((string-equal bname bcurr)
             (setq end (point))
             (set-text-properties
-             start end '(face swbuff-current-buffer-face)))
+             start end '(face nswbuff-current-buffer-face)))
            (t
             (set-text-properties
-             start (point) '(face swbuff-default-face))))
+             start (point) '(face nswbuff-default-face))))
           (setq start (point))
           (insert fillr)
           (if (> (point) start)
               (set-text-properties
-               start (point) '(face swbuff-separator-face)))))
+               start (point) '(face nswbuff-separator-face)))))
       (if adjust
-          (swbuff-adjust-window)
-        (swbuff-adjust-window 1)
-        (swbuff-scroll-window end)))))
+          (nswbuff-adjust-window)
+        (nswbuff-adjust-window 1)
+        (nswbuff-scroll-window end)))))
 
-(defvar swbuff-timer nil
+(defvar nswbuff-timer nil
   "Timer used to discard the status window.")
 
-(defun swbuff-show-status-window ()
+(defun nswbuff-show-status-window ()
   "Pop-up a status window at the bottom of the selected window.
 The status window shows the list of switchable buffers where the
-switched one is hilighted using `swbuff-current-buffer-face'.  It is
+switched one is hilighted using `nswbuff-current-buffer-face'.  It is
 automatically discarded after any command is executed or after the
-delay specified by `swbuff-clear-delay'."
-  (swbuff-start-switching)
-  (if swbuff-buffer-list-holder
+delay specified by `nswbuff-clear-delay'."
+  (nswbuff-start-switching)
+  (if nswbuff-buffer-list-holder
       (let ((bcurr (buffer-name))
             (window-min-height 1)
             cursor-in-non-selected-windows)
-        (with-current-buffer (get-buffer-create swbuff-status-buffer-name)
-          (let ((w (or (get-buffer-window swbuff-status-buffer-name)
+        (with-current-buffer (get-buffer-create nswbuff-status-buffer-name)
+          (let ((w (or (get-buffer-window nswbuff-status-buffer-name)
                        (split-window-vertically -2))))
             (set-window-buffer w (current-buffer))
-            (swbuff-layout-status-line w bcurr)
-            (add-hook 'pre-command-hook 'swbuff-pre-command-hook)
-            (if (timerp swbuff-timer)
-                (cancel-timer swbuff-timer))
-            (setq swbuff-timer (run-with-timer
-                                swbuff-clear-delay nil
-                                #'swbuff-clear-delay-hook)))))
+            (nswbuff-layout-status-line w bcurr)
+            (add-hook 'pre-command-hook 'nswbuff-pre-command-hook)
+            (if (timerp nswbuff-timer)
+                (cancel-timer nswbuff-timer))
+            (setq nswbuff-timer (run-with-timer
+                                nswbuff-clear-delay nil
+                                #'nswbuff-clear-delay-hook)))))
     (message "No buffers eligible for switching.")))
 
-(defun swbuff-discard-status-window ()
+(defun nswbuff-discard-status-window ()
   "Discard the status window."
-  (let ((w (get-buffer-window swbuff-status-buffer-name))
-        (b (get-buffer swbuff-status-buffer-name)))
+  (let ((w (get-buffer-window nswbuff-status-buffer-name))
+        (b (get-buffer nswbuff-status-buffer-name)))
     (and w (delete-window w))
     (and b (kill-buffer b))))
 
-(defun swbuff-start-switching ()
-  "Make sure swbuff-buffer-list-holder is set before proceeding."
-  (or swbuff-buffer-list-holder
-      (setq swbuff-buffer-list-holder (swbuff-buffer-list))))
+(defun nswbuff-start-switching ()
+  "Make sure nswbuff-buffer-list-holder is set before proceeding."
+  (or nswbuff-buffer-list-holder
+      (setq nswbuff-buffer-list-holder (nswbuff-buffer-list))))
 
-(defun swbuff-end-switching ()
+(defun nswbuff-end-switching ()
   "Called when the buffer finally is choosen."
-  (if swbuff-recent-buffers-first
+  (if nswbuff-recent-buffers-first
       (let ((bcurr (current-buffer))
-            (l (nreverse swbuff-buffer-list-holder)))
+            (l (nreverse nswbuff-buffer-list-holder)))
         (while l
           (switch-to-buffer (car l))
           (setq l (cdr l)))
         (switch-to-buffer bcurr)))
-  (setq swbuff-buffer-list-holder nil))
+  (setq nswbuff-buffer-list-holder nil))
 
-(defun swbuff-clear-delay-hook ()
-  (swbuff-discard-status-window)
-  (and swbuff-clear-delay-ends-switching (swbuff-end-switching)))
+(defun nswbuff-clear-delay-hook ()
+  (nswbuff-discard-status-window)
+  (and nswbuff-clear-delay-ends-switching (nswbuff-end-switching)))
 
-(defun swbuff-pre-command-hook ()
+(defun nswbuff-pre-command-hook ()
   "Track successive calls to switch commands.
 Run as a `pre-command-hook'."
-  (if (memq this-command '(swbuff-switch-to-previous-buffer
-                           swbuff-switch-to-next-buffer
-                           swbuff-kill-this-buffer
-                           swbuff-ignore))
+  (if (memq this-command '(nswbuff-switch-to-previous-buffer
+                           nswbuff-switch-to-next-buffer
+                           nswbuff-kill-this-buffer
+                           nswbuff-ignore))
       nil
-    (swbuff-discard-status-window)
-    (swbuff-end-switching))
-  (if (timerp swbuff-timer)
-      (cancel-timer swbuff-timer))
-  (setq swbuff-timer nil)
-  (remove-hook 'pre-command-hook 'swbuff-pre-command-hook))
+    (nswbuff-discard-status-window)
+    (nswbuff-end-switching))
+  (if (timerp nswbuff-timer)
+      (cancel-timer nswbuff-timer))
+  (setq nswbuff-timer nil)
+  (remove-hook 'pre-command-hook 'nswbuff-pre-command-hook))
 
-(defun swbuff-previous-buffer ()
+(defun nswbuff-previous-buffer ()
   "Display and activate the buffer at the end of the buffer list."
-  (let ((l (swbuff-buffer-list)))
+  (let ((l (nswbuff-buffer-list)))
     (and l (switch-to-buffer (nth (1- (length l)) l)))))
 
-(defun swbuff-next-buffer ()
+(defun nswbuff-next-buffer ()
   "Display and activate the next buffer in the buffer list."
-  (let ((l (nreverse (swbuff-buffer-list))))
+  (let ((l (nreverse (nswbuff-buffer-list))))
     (while (cdr l)
       (switch-to-buffer (car l))
       (setq l (cdr l)))))
@@ -450,39 +452,39 @@ Run as a `pre-command-hook'."
 ;;
 
 ;;;###autoload
-(defun swbuff-switch-to-previous-buffer ()
+(defun nswbuff-switch-to-previous-buffer ()
   "Switch to the previous buffer in the buffer list."
   (interactive)
-  (and swbuff-display-original-buffer-first (swbuff-start-switching))
-  (swbuff-previous-buffer)
-  (swbuff-show-status-window))
+  (and nswbuff-display-original-buffer-first (nswbuff-start-switching))
+  (nswbuff-previous-buffer)
+  (nswbuff-show-status-window))
 
 ;;;###autoload
-(defun swbuff-switch-to-next-buffer ()
+(defun nswbuff-switch-to-next-buffer ()
   "Switch to the next buffer in the buffer list."
   (interactive)
-  (and swbuff-display-original-buffer-first (swbuff-start-switching))
-  (swbuff-next-buffer)
-  (swbuff-show-status-window))
+  (and nswbuff-display-original-buffer-first (nswbuff-start-switching))
+  (nswbuff-next-buffer)
+  (nswbuff-show-status-window))
 
 ;;;###autoload
-(defun swbuff-kill-this-buffer ()
+(defun nswbuff-kill-this-buffer ()
   "Kill the current buffer.
 And update the status window if showing."
   (interactive)
   (kill-buffer (current-buffer))
-  (and (get-buffer-window swbuff-status-buffer-name)
-       (swbuff-show-status-window)))
+  (and (get-buffer-window nswbuff-status-buffer-name)
+       (nswbuff-show-status-window)))
 
-(defun swbuff-default-load-hook ()
+(defun nswbuff-default-load-hook ()
   "Default hook run when package has been loaded.
-Define keyboard shortcut [C-f6] for `swbuff-switch-to-next-buffer' and
-\[C-S-f6] for `swbuff-switch-to-previous-buffer'."
-  (global-set-key [(control f6)]       'swbuff-switch-to-next-buffer)
-  (global-set-key [(control shift f6)] 'swbuff-switch-to-previous-buffer))
+Define keyboard shortcut [C-f6] for `nswbuff-switch-to-next-buffer' and
+\[C-S-f6] for `nswbuff-switch-to-previous-buffer'."
+  (global-set-key [(control f6)]       'nswbuff-switch-to-next-buffer)
+  (global-set-key [(control shift f6)] 'nswbuff-switch-to-previous-buffer))
 
-(provide 'swbuff)
+(provide 'nswbuff)
 
-(run-hooks 'swbuff-load-hook)
+(run-hooks 'nswbuff-load-hook)
 
-;;; swbuff.el ends here
+;;; nswbuff.el ends here
