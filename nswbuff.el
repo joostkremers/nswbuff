@@ -169,11 +169,6 @@ character.  To exclude all the internal buffers (that is *scratch*,
   :group 'nswbuff
   :type '(repeat (regexp :format "%v")))
 
-(defcustom nswbuff-load-hook '(nswbuff-default-load-hook)
-  "Hook run when package has been loaded.
-See also `nswbuff-default-load-hook'."
-  :group 'nswbuff
-  :type 'hook)
 
 ;;; Internals
 ;;
@@ -477,15 +472,6 @@ And update the status window if showing."
   (and (get-buffer-window nswbuff-status-buffer-name)
        (nswbuff-show-status-window)))
 
-(defun nswbuff-default-load-hook ()
-  "Default hook run when package has been loaded.
-Define keyboard shortcut [C-f6] for `nswbuff-switch-to-next-buffer' and
-\[C-S-f6] for `nswbuff-switch-to-previous-buffer'."
-  (global-set-key [(control f6)]       'nswbuff-switch-to-next-buffer)
-  (global-set-key [(control shift f6)] 'nswbuff-switch-to-previous-buffer))
-
 (provide 'nswbuff)
-
-(run-hooks 'nswbuff-load-hook)
 
 ;;; nswbuff.el ends here
