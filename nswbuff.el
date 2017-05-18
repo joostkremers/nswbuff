@@ -10,7 +10,6 @@
 ;; Keywords: extensions convenience
 ;; Package-Version: 1.0
 ;; Package-Requires: ((emacs "25.1"))
-;; Revision: $Id$
 
 (defconst nswbuff-version "1.0")
 
