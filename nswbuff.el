@@ -168,6 +168,98 @@ character.  To exclude all the internal buffers (that is *scratch*,
   :group 'nswbuff
   :type '(repeat (regexp :format "%v")))
 
+(defcustom nswbuff-this-frame-only t
+  "If non-nil, skip buffers displayed in other visble or iconified frames.
+This is a convient way of temporarily excluding a particluar
+buffer from the cycle list."
+  :group 'nswbuff
+  :type 'boolean)
+
+(defcustom nswbuff-exclude-mode-regexp ""
+  "Regular expression matching major modes to skip when cycling."
+  :group 'nswbuff
+  :type '(string :tag "Regexp"))
+
+(defcustom nswbuff-include-buffer-regexps nil
+  "List of buffer names to always be included."
+  :group 'nswbuff
+  :type '(repeat (regexp :format "%v")))
+
+(defcustom nswbuff-pre-switch-hook nil
+  "Standard hook containing functions to be called before a switch.
+This option can be made buffer-local.  This may be useful for
+handling modes that use more than one window for display.  For
+example, VM uses one (small) window for its Summary buffer and
+the remaining frame for the Presentation buffer.  Switching
+buffers and retaining the window configuration doesn't make sense
+in this context, so by setting the following hooks, these extra
+windows can be deleted before switching:
+
+\(defun my-vm-mode-hook ()
+  \"Delete other windows before a switch.\"
+  (make-local-hook 'swbuff-pre-switch-hook)
+  (add-hook 'swbuff-pre-switch-hook #'delete-other-windows t t))
+
+\(add-hook 'vm-mode-hook              #'my-vm-mode-hook)
+\(add-hook 'vm-summary-mode-hook      #'my-vm-mode-hook)
+\(add-hook 'vm-presentation-mode-hook #'my-vm-mode-hook)"
+  :group 'nswbuff
+  :type 'hook)
+
+(defcustom nswbuff-start-with-current-centered nil
+  "If t, center the current buffer in the buffer list."
+  :group 'nswbuff
+  :type 'boolean)
+
+(defcustom nswbuff-delay-switch nil
+  "If t, just show the buffer list upon first call.
+When set, the functions `nswbuff-next-buffer' and
+`nswbuff-previous-buffer' simply display the buffer list when
+they are first called rather than switching buffers immediately.
+Only a second call to either of these functions actually switches
+the buffer."
+  :group 'nswbuff
+  :type 'boolean)
+
+(defcustom nswbuff-display-intermediate-buffers nil
+  "If t, show intermediate buffers while switching.
+When set, each call to `nswbuff-next-buffer' or
+`nswbuff-previous-buffer' in a sequence causes a new buffer to be
+displayed.  If nil only the last buffer in the sequence is
+actually displayed."
+  :group 'nswbuff
+  :type 'boolean)
+
+(defcustom nswbuff-left ""
+  "String placed immediately before a buffer name in the status line.
+For example, try \"(\"."
+  :group 'nswbuff
+  :type 'string)
+
+(defcustom nswbuff-right ""
+  "String placed immediately after a buffer name in the status line.
+For example, try \")\"."
+  :group 'nswbuff
+  :type 'string)
+
+(defcustom nswbuff-special-buffers-re "^\\*"
+  "Regular expression matching special buffers.
+Buffers matching this regular expression are highlighted with
+`nswbuff-special-buffers-face'."
+  :group 'nswbuff
+  :type 'string)
+
+(defface nswbuff-special-buffers-face '((t (:foreground "red" :bold nil :underline nil)))
+  "Face for highlighting special buffers in the buffer list."
+  :group 'nswbuff)
+
+(defcustom nswbuff-mode-line-format nil
+  "Mode line format of the nswbuff status window.
+If set to nil, no mode line is displayed.  See `mode-line-format'
+for a detailed format description."
+  :group 'nswbuff
+  :type 'sexp)
+
 ;;; Internals
 ;;
 (defconst nswbuff-status-buffer-name " *nswbuff*"
