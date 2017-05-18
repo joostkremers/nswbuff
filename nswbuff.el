@@ -171,7 +171,7 @@ character.  To exclude all the internal buffers (that is *scratch*,
 
 ;;; Internals
 ;;
-(defconst nswbuff-status-buffer-name "*nswbuff*"
+(defconst nswbuff-status-buffer-name " *nswbuff*"
   "Name of the working buffer used to display the buffer list.")
 
 (defun nswbuff-include-p (name)
