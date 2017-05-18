@@ -254,7 +254,7 @@ value."
   (defun nswbuff-scroll-window (position)
     "Adjust horizontal scrolling to ensure that POSITION is visible."
     (setq truncate-lines t)
-    (let ((automatic-hscrolling t))
+    (let ((auto-hscroll-mode t))
       (goto-char position)))
 
   ;; Use mouse-1, mouse-3 on mode line buffer identification to
