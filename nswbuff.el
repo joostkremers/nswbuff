@@ -350,7 +350,7 @@ delay specified by `nswbuff-clear-delay'."
                        (split-window-vertically -2))))
             (set-window-buffer w (current-buffer))
             (nswbuff-layout-status-line w bcurr)
-            (add-hook 'pre-command-hook 'nswbuff-pre-command-hook)
+            (add-hook 'pre-command-hook 'nswbuff-pre-command-hook-function)
             (if (timerp nswbuff-timer)
                 (cancel-timer nswbuff-timer))
             (setq nswbuff-timer (run-with-timer
@@ -386,7 +386,7 @@ delay specified by `nswbuff-clear-delay'."
   (nswbuff-discard-status-window)
   (and nswbuff-clear-delay-ends-switching (nswbuff-end-switching)))
 
-(defun nswbuff-pre-command-hook ()
+(defun nswbuff-pre-command-hook-function ()
   "Track successive calls to switch commands.
 Run as a `pre-command-hook'."
   (if (memq this-command '(nswbuff-switch-to-previous-buffer
@@ -399,7 +399,7 @@ Run as a `pre-command-hook'."
   (if (timerp nswbuff-timer)
       (cancel-timer nswbuff-timer))
   (setq nswbuff-timer nil)
-  (remove-hook 'pre-command-hook 'nswbuff-pre-command-hook))
+  (remove-hook 'pre-command-hook 'nswbuff-pre-command-hook-function))
 
 (defun nswbuff-previous-buffer ()
   "Display and activate the buffer at the end of the buffer list."
