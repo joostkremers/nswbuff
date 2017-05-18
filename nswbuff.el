@@ -74,7 +74,7 @@
 
 ;;; Code:
 (require 'timer)
-
+
 ;;; Options
 ;;
 (defgroup nswbuff nil
@@ -169,7 +169,6 @@ character.  To exclude all the internal buffers (that is *scratch*,
   :group 'nswbuff
   :type '(repeat (regexp :format "%v")))
 
-
 ;;; Internals
 ;;
 (defconst nswbuff-status-buffer-name "*nswbuff*"
@@ -443,7 +442,7 @@ Run as a `pre-command-hook'."
     (while (cdr l)
       (switch-to-buffer (car l))
       (setq l (cdr l)))))
-
+
 ;;; Commands
 ;;
 
