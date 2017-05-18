@@ -245,57 +245,26 @@ value."
 ;; Used to prevent discarding the status window on some mouse event.
 (defalias 'nswbuff-ignore 'ignore)
 
-;;; Compatibility
-(cond
- ;; GNU Emacs 21
- ((and (not (featurep 'xemacs))
-       (> emacs-major-version 20))
+(defun nswbuff-scroll-window (position)
+  "Adjust horizontal scrolling to ensure that POSITION is visible."
+  (setq truncate-lines t)
+  (let ((auto-hscroll-mode t))
+    (goto-char position)))
 
-  (defun nswbuff-scroll-window (position)
-    "Adjust horizontal scrolling to ensure that POSITION is visible."
-    (setq truncate-lines t)
-    (let ((auto-hscroll-mode t))
-      (goto-char position)))
-
-  ;; Use mouse-1, mouse-3 on mode line buffer identification to
-  ;; respectively switch to previous or next buffer.  And mouse-2 to
-  ;; kill the current buffer.
-  (let ((map mode-line-buffer-identification-keymap))
-    (define-key map [mode-line mouse-1]
-      'nswbuff-switch-to-previous-buffer)
-    (define-key map [mode-line drag-mouse-1]
-      'nswbuff-ignore)
-    (define-key map [mode-line down-mouse-1]
-      'nswbuff-ignore)
-    (define-key map [mode-line mouse-2]
-      'nswbuff-kill-this-buffer)
-    (define-key map [mode-line mouse-3]
-      'nswbuff-switch-to-next-buffer))
-
-  )
-
- ;; GNU Emacs 20 or XEmacs
- (t
-
-  (defconst nswbuff-extra-space 3
-    "Extra space left in a line of the status window.
-The default value correspond to the truncated glyphs + one space.")
-
-  (defun nswbuff-scroll-window (position)
-    "Adjust horizontal scrolling to ensure that POSITION is visible."
-    (setq truncate-lines t)
-    ;; Don't display the XEmacs horizontal scrollbar
-    (let* ((window (selected-window))
-           (wdth (window-width window))
-           (hscr (window-hscroll window)))
-      (if (featurep 'xemacs)
-          (set-specifier horizontal-scrollbar-visible-p nil window))
-      (if (>= position (+ wdth hscr))
-          (set-window-hscroll window (- (+ position nswbuff-extra-space) wdth))
-        (if (< position hscr)
-            (set-window-hscroll window (- position nswbuff-extra-space))))))
-
-  ))
+;; Use mouse-1, mouse-3 on mode line buffer identification to
+;; respectively switch to previous or next buffer.  And mouse-2 to
+;; kill the current buffer.
+(let ((map mode-line-buffer-identification-keymap))
+  (define-key map [mode-line mouse-1]
+    'nswbuff-switch-to-previous-buffer)
+  (define-key map [mode-line drag-mouse-1]
+    'nswbuff-ignore)
+  (define-key map [mode-line down-mouse-1]
+    'nswbuff-ignore)
+  (define-key map [mode-line mouse-2]
+    'nswbuff-kill-this-buffer)
+  (define-key map [mode-line mouse-3]
+    'nswbuff-switch-to-next-buffer))
 
 (defun nswbuff-one-window-p (window)
   "Return non-nil if there is only one window in this frame.
