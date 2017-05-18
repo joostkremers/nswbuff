@@ -382,6 +382,7 @@ delay specified by `nswbuff-clear-delay'."
   (setq nswbuff-buffer-list-holder nil))
 
 (defun nswbuff-clear-delay-hook ()
+  "Discard the status window and finish buffer switching."
   (nswbuff-discard-status-window)
   (and nswbuff-clear-delay-ends-switching (nswbuff-end-switching)))
 
