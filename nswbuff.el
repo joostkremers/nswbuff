@@ -354,8 +354,8 @@ delay specified by `nswbuff-clear-delay'."
             (if (timerp nswbuff-timer)
                 (cancel-timer nswbuff-timer))
             (setq nswbuff-timer (run-with-timer
-                                nswbuff-clear-delay nil
-                                #'nswbuff-clear-delay-hook)))))
+                          nswbuff-clear-delay nil
+                          #'nswbuff-clear-delay-hook-function)))))
     (message "No buffers eligible for switching.")))
 
 (defun nswbuff-discard-status-window ()
@@ -381,7 +381,7 @@ delay specified by `nswbuff-clear-delay'."
         (switch-to-buffer bcurr)))
   (setq nswbuff-buffer-list-holder nil))
 
-(defun nswbuff-clear-delay-hook ()
+(defun nswbuff-clear-delay-hook-function ()
   "Discard the status window and finish buffer switching."
   (nswbuff-discard-status-window)
   (and nswbuff-clear-delay-ends-switching (nswbuff-end-switching)))
