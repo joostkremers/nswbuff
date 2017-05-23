@@ -103,22 +103,6 @@ width.  The possible choices are:
   :group 'nswbuff
   :type '(number :tag "seconds"))
 
-(defcustom nswbuff-clear-delay-ends-switching nil
-  "Should switching end after the clear-delay expired?
-If nil, you stay in switching mode and the selected buffer does not
-count as used just because the status window disappeared after the
-timeout.  But if you prefer so set it to t."
-  :group 'nswbuff
-  :type 'boolean)
-
-(defcustom nswbuff-display-original-buffer-first t
-  "Should the old buffer be first in the list?
-If non-nil, the buffer where switching started will be the leftmost in
-the list.  Otherwise it will be the buffer the first command switched
-to."
-  :group 'nswbuff
-  :type 'boolean)
-
 (defcustom nswbuff-recent-buffers-first t
   "Show recent buffers first?
 If non-nil the buffer list is sorted by how recently the buffers were
