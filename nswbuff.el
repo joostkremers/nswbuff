@@ -354,16 +354,11 @@ value."
 ;; respectively switch to previous or next buffer.  And mouse-2 to
 ;; kill the current buffer.
 (let ((map mode-line-buffer-identification-keymap))
-  (define-key map [mode-line mouse-1]
-    'nswbuff-switch-to-previous-buffer)
-  (define-key map [mode-line drag-mouse-1]
-    'nswbuff-ignore)
-  (define-key map [mode-line down-mouse-1]
-    'nswbuff-ignore)
-  (define-key map [mode-line mouse-2]
-    'nswbuff-kill-this-buffer)
-  (define-key map [mode-line mouse-3]
-    'nswbuff-switch-to-next-buffer))
+  (define-key map [mode-line mouse-1] 'nswbuff-switch-to-previous-buffer)
+  (define-key map [mode-line drag-mouse-1] 'nswbuff-ignore)
+  (define-key map [mode-line down-mouse-1] 'nswbuff-ignore)
+  (define-key map [mode-line mouse-2] 'nswbuff-kill-this-buffer)
+  (define-key map [mode-line mouse-3] 'nswbuff-switch-to-next-buffer))
 
 (defun nswbuff-one-window-p (window)
   "Return non-nil if there is only one window in this frame.
