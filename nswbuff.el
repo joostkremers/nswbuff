@@ -101,7 +101,7 @@ width.  The possible choices are:
 (defcustom nswbuff-clear-delay 3
   "Time in seconds to delay before discarding the status window."
   :group 'nswbuff
-  :type '(number :tag "seconds"))
+  :type '(number :tag "Seconds"))
 
 (defcustom nswbuff-recent-buffers-first t
   "Show recent buffers first?
