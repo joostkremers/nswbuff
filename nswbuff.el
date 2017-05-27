@@ -487,8 +487,7 @@ after the delay specified by `nswbuff-clear-delay'."
 	    (setq nswbuff-status-window window)
             (set-window-buffer window (current-buffer))
 	    (nswbuff-layout-status-line window buffer-name)
-	    (add-hook 'pre-command-hook 'nswbuff-pre-command)
-	    ;; use a timer that we can cancel rather than sit-for
+            (set-transient-map nswbuff-override-map nil #'nswbuff-maybe-discard-status-window)
 	    (if (timerp nswbuff-display-timer)
 		(cancel-timer nswbuff-display-timer))
 	    (setq nswbuff-display-timer
@@ -537,10 +536,31 @@ BUFFER should be a buffer name.  It is tested against the regular expressions in
       (setq rl (cdr rl)))
     (not (null rl))))
 
+(defun nswbuff-maybe-discard-status-window ()
+  "Discard the status window conditionally."
+  (when (eq (selected-frame) nswbuff-initial-frame)
+    (if (timerp nswbuff-display-timer)
+	(cancel-timer nswbuff-display-timer))
+    (setq nswbuff-display-timer nil)
+    (cond
+     ;; If this-command is a command bound in `nswbuff-override-map', we renew the
+     ;; timer and the map.
+     ((where-is-internal this-command (list nswbuff-override-map))
+      (setq nswbuff-display-timer
+            (run-with-timer nswbuff-clear-delay nil
+                            #'nswbuff-discard-status-window))
+      (set-transient-map nswbuff-override-map nil #'nswbuff-maybe-discard-status-window))
+     ;; If this-command is a buffer-switching command, we do nothing.
+     ((memq this-command '(nswbuff-switch-to-previous-buffer
+                           nswbuff-switch-to-next-buffer
+                           nswbuff-ignore))
+      t)
+     ;; If this-command is anything else, we discard the status window.
+     (t (nswbuff-discard-status-window)))))
+
 (defun nswbuff-discard-status-window ()
   "Discard the status window.
-This function is called by `sit-for' in
-`nswbuff-show-status-window' and `nswbuff-post-command'."
+This function is called directly by the nswbuff timer."
   (let ((buffer (get-buffer nswbuff-status-buffer-name))
 	(buffer-list (nreverse nswbuff-initial-buffer-list)))
     (if (window-live-p nswbuff-status-window)
@@ -587,23 +607,6 @@ This function is called by `sit-for' in
           (setq l (cdr l)))
         (switch-to-buffer bcurr)))
   (setq nswbuff-buffer-list-holder nil))
-
-(defun nswbuff-pre-command ()
-  "Function used to track successive invocations of switch commands.
-This function is for use in `pre-command-hook'."
-  (when (eq (selected-frame) nswbuff-initial-frame)
-    (remove-hook 'pre-command-hook 'nswbuff-pre-command)
-    (if (timerp nswbuff-display-timer)
-	(cancel-timer nswbuff-display-timer))
-    (setq nswbuff-display-timer nil)
-    (unless (or (eq this-command 'nswbuff-kill-this-buffer)
-		(eq this-command 'nswbuff-switch-to-previous-buffer)
-		(eq this-command 'nswbuff-switch-to-next-buffer)
-		(eq this-command 'nswbuff-ignore))
-      (nswbuff-discard-status-window)
-      ;; discard the command that ends the sequence
-      ;; (setq this-command 'ignore) ;; err no
-      )))
 
 (defun nswbuff-previous-buffer ()
   "Display and activate the buffer at the end of the buffer list."
