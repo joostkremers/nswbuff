@@ -269,7 +269,6 @@ timer changes the current window.")
 
 (defvar nswbuff-override-map
   (let ((map (make-sparse-keymap)))
-    (suppress-keymap map)
     (define-key map [backspace] #'nswbuff-kill-this-buffer)
     (define-key map [delete] #'nswbuff-kill-this-buffer)
     (define-key map [(control d)] #'nswbuff-kill-this-buffer)
