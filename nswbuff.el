@@ -290,7 +290,7 @@ during buffer switching.")
 
 (defun nswbuff-kill-this-buffer ()
   "Kill the current buffer but retain the status window.
-This function can be bound to a key in `nswbuff-mode-map' to kill
+This function can be bound to a key in `nswbuff-override-map' to kill
 the current buffer without ending the buffer switching sequence."
   (interactive)
   (let ((dead-buffer (current-buffer)))
