@@ -262,7 +262,7 @@ for a detailed format description."
 
 (defvar nswbuff-status-window nil
   "The status buffer window.
-This window is savei in case any external code that runs on a
+This window is saved in case any external code that runs on a
 timer changes the current window.")
 
 (defvar nswbuff-display-timer nil "The timer used to remove the status window after 'nswbuff-clear-delay'.")
