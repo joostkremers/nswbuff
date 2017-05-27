@@ -410,10 +410,7 @@ BCURR is the buffer name to highlight."
 			  (butlast blist half-way)))) ;; first half
     (save-selected-window
       (select-window window)
-      (setq header-line-format nil) ;; Hide Emacs 21 header line.
-      (if (featurep 'xemacs)
-	  (setq modeline-format nswbuff-modeline-format)
-	(setq mode-line-format nswbuff-mode-line-format))
+      (setq mode-line-format nswbuff-mode-line-format)
       (erase-buffer)
       (setq start (point))
       (insert head)
