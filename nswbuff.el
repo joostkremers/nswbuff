@@ -267,6 +267,19 @@ timer changes the current window.")
 
 (defvar nswbuff-display-timer nil "The timer used to remove the status window after 'nswbuff-clear-delay'.")
 
+(defvar nswbuff-override-map
+  (let ((map (make-sparse-keymap)))
+    (suppress-keymap map)
+    (define-key map [backspace] #'nswbuff-kill-this-buffer)
+    (define-key map [delete] #'nswbuff-kill-this-buffer)
+    (define-key map [(control d)] #'nswbuff-kill-this-buffer)
+    map)
+  "Override map for nswbuff.
+This map becomes active whenever nswbuff-switch-to-next-buffer or
+nswbuff-switch-to-previous-buffer is invoked.  It can be used to
+bind functions for buffer handling which then become available
+during buffer switching.")
+
 (defun nswbuff-initialize ()
   "Initialize nswbuff variables prior to a switch sequence."
   (setq nswbuff-buffer-list (nswbuff-buffer-list)
