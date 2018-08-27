@@ -309,19 +309,16 @@ the current buffer without ending the buffer switching sequence."
 Buffers whose name matches `nswbuff-exclude-buffer-regexps' are
 excluded, unless they match one of the regular expressions in
 `include-buffer-regexps'.  If `nswbuff-this-frame-only' is
-non-nil, buffers that are currently displayed in other visble or
+non-nil, buffers that are currently displayed in other visible or
 iconified frames are also excluded."
   (let ((blist
 	 (delq nil (mapcar
 		    (lambda (buf)
 		      (and (or (nswbuff-include-p (buffer-name buf))
-			       (not
-				(or
-				 (nswbuff-exclude-mode-p buf)
-				 (nswbuff-exclude-p (buffer-name buf)))))
-			   (if nswbuff-this-frame-only
-			       (not (nswbuff-in-other-frame-p buf))
-			     t)
+			       (not (or (nswbuff-exclude-mode-p buf)
+                                        (nswbuff-exclude-p (buffer-name buf)))))
+			   (not (and nswbuff-this-frame-only
+                                     (nswbuff-in-other-frame-p buf)))
 			   buf))
 		    (buffer-list)))))
     (when blist
