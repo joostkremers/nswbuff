@@ -260,6 +260,9 @@ for a detailed format description."
 
 (defvar nswbuff-current-buffer nil "Current buffer being displayed during switching.")
 
+(defvar-local nswbuff-exclude nil "Buffer-local variable that can be set to exclude a buffer from the buffer list.")
+(put 'nswbuff-exclude 'safe-local-variable 'booleanp)
+
 (defvar nswbuff-status-window nil
   "The status buffer window.
 This window is saved in case any external code that runs on a
@@ -314,7 +317,8 @@ iconified frames are also excluded."
   (let ((blist
 	 (delq nil (mapcar
 		    (lambda (buf)
-		      (and (not (nswbuff-exclude-mode-p buf))
+		      (and (not (buffer-local-value 'nswbuff-exclude buf))
+                           (not (nswbuff-exclude-mode-p buf))
                            (or (nswbuff-include-p (buffer-name buf))
                                (not (nswbuff-exclude-p (buffer-name buf))))
                            (not (and nswbuff-this-frame-only
