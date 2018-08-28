@@ -314,12 +314,12 @@ iconified frames are also excluded."
   (let ((blist
 	 (delq nil (mapcar
 		    (lambda (buf)
-		      (and (or (nswbuff-include-p (buffer-name buf))
-			       (not (or (nswbuff-exclude-mode-p buf)
-                                        (nswbuff-exclude-p (buffer-name buf)))))
-			   (not (and nswbuff-this-frame-only
+		      (and (not (nswbuff-exclude-mode-p buf))
+                           (or (nswbuff-include-p (buffer-name buf))
+                               (not (nswbuff-exclude-p (buffer-name buf))))
+                           (not (and nswbuff-this-frame-only
                                      (nswbuff-in-other-frame-p buf)))
-			   buf))
+                           buf))
 		    (buffer-list)))))
     (when blist
       ;; add the current buffer if it would normally be skipped
