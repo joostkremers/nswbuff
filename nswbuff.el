@@ -439,7 +439,7 @@ BCURR is the buffer name to highlight."
 	    (set-text-properties
 	     start end '(face nswbuff-current-buffer-face)))
 	   ((and (not (string= nswbuff-special-buffers-re ""))
-                 (string-match nswbuff-special-buffers-re bname))
+                 (string-match-p nswbuff-special-buffers-re bname))
 	    (set-text-properties
 	     start (point) '(face nswbuff-special-buffers-face)))
 	   (t
@@ -508,8 +508,8 @@ This is the case if BUFFER's major mode matches one of the
 regexps in `nswbuff-exclude-mode-regexps'."
   (unless (string-equal "" nswbuff-exclude-mode-regexp)
     (with-current-buffer buffer
-      (string-match nswbuff-exclude-mode-regexp
-		    (symbol-name major-mode)))))
+      (string-match-p nswbuff-exclude-mode-regexp
+                      (symbol-name major-mode)))))
 
 (defun nswbuff-exclude-p (buffer)
   "Return non-nil if BUFFER should be excluded from the buffer list.
@@ -517,7 +517,7 @@ BUFFER should be a buffer name.  It is tested against the regular expressions in
 `nswbuff-exclude-buffer-regexps', and if one matches, BUFFER is excluded."
   (let ((rl (cons (regexp-quote nswbuff-status-buffer-name)
 		  (delete "" nswbuff-exclude-buffer-regexps))))
-    (while (and rl (car rl) (not (string-match (car rl) buffer)))
+    (while (and rl (car rl) (not (string-match-p (car rl) buffer)))
       (setq rl (cdr rl)))
     (not (null rl))))
 
@@ -526,7 +526,7 @@ BUFFER should be a buffer name.  It is tested against the regular expressions in
 BUFFER should be a buffer name.  It is tested against the regular expressions in
 `nswbuff-include-buffer-regexps', and if one matches, BUFFER is included."
   (let ((rl (delete "" nswbuff-include-buffer-regexps)))
-    (while (and rl (car rl) (not (string-match (car rl) name)))
+    (while (and rl (car rl) (not (string-match-p (car rl) name)))
       (setq rl (cdr rl)))
     (not (null rl))))
 
