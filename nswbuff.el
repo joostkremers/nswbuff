@@ -73,6 +73,8 @@
 
 ;;; Code:
 (require 'timer)
+(require 'seq)
+(require 'subr-x)
 
 ;;; Options
 
