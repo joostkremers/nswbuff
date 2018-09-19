@@ -18,21 +18,22 @@ For now, installation is manually. Download the library, put it somewhere in you
 
 The primary commands are `nswbuff-switch-to-previous-buffer` and `nswbuff-switch-to-next-buffer`, which should be bound to keys of your liking, e.g., `<C-tab>` and `<C-S-iso-lefttab>` (i.e., `Ctrl-TAB` and `Shift-Ctrl-TAB`).
 
-In a default setup, executing `nswbuff-switche-to-next-buffer` once has the following effect:
+In a default setup, executing `nswbuff-switch-to-next-buffer` once has the following effect:
 
 ![nswbuff screen shot 1](default-setup.png)
 
-The bottom of the frame shows the list of buffers, with the one marked in bold red to become active after a short delay or when any key is pressed. The buffer in black is the one you're switching from, which is still visible in the main window. Executing `nswbuff-switch-to-next-buffer` again will highlight the next buffer in the list (`*ielm*` in the screen shot).
+The bottom of the frame shows the list of buffers. The buffer marked in bold red will become active after a short delay or when any key is pressed. The buffer in black is the one you're switching from, which is still visible in the main window. Executing `nswbuff-switch-to-next-buffer` again will highlight the next buffer in the list (`*ielm*` in the screen shot).
 
 If you wish to make the intermediate buffers visible during cycling, you can set the option `nswbuff-display-intermediate-buffers` to `t`:
 
 ![nswbuff screen shot 2](custom-setup.png)
 
-This screen shot also shows that the face and colors to display the buffer names are fully customizable.
+This screen shot also shows that the face and colors used for displaying the buffer names are fully customizable.
+
 
 ## Customizing the buffer list ##
 
-The buffers that `nswbuff` offer for cycling are essentially the buffers returned by the function `buffer-list`. There are a few options to customize this list, however. First, you can exclude buffers with `nswbuff-exclude-buffer-regexps`. Any buffer whose name matches one of the regexps in this list is not switchable. The default setting excludes buffers whose name begin with a blank character.  To exclude all the internal buffers (that is `*scratch*`, `*Message*`, etc...) you could use the following regexps `'("^ .*" "^\\*.*\\*")`.
+The buffers that `nswbuff` offers for cycling are essentially the buffers returned by the function `buffer-list`. There are a few options to customize this list, however. First, you can exclude buffers with `nswbuff-exclude-buffer-regexps`. Any buffer whose name matches one of the regexps in this list is not switchable. The default setting excludes buffers whose name begin with a blank character.  To exclude all the internal buffers (that is `*scratch*`, `*Message*`, etc...) you could use the following regexps `'("^ .*" "^\\*.*\\*")`.
 
 Buffers can also be excluded based on their major mode through the option `nswbuff-exclude-mode-regexps`. These regexps are matched against the `symbol-name` of the buffer's major mode.
 
@@ -52,5 +53,5 @@ Quite a few aspects of `nswbuff` can be customized in addition to the ones alrea
 
 `nswbuff` provides some very simple but nifty integration with [Projectile](http://batsov.com/projectile). If you set `nswbuff-buffer-list-function` to `nswbuff-projectile-buffer-list`, only the buffers belonging to the current Projectile project are offered for switching.  This makes for a very light-weight (but in my opinion effective) alternative to such modes as [`perspective.el`](https://github.com/nex3/perspective-el) or [`persp-mode`](https://github.com/Bad-ptr/persp-mode.el). Switching buffers with `nswbuff` keeps you in the project, any other buffer-switching method (`C-x b`, ivy, helm, or what have you) is not affected and can thus be used to move out of the project.
 
-Note that `nswbuff-projectile-buffer-list` has another property: if you're in a project, it adds any buffers in `buffer-list` whose name matches `nswbuff-include-buffer-regexps` to the list of buffers it returns. Since this option is normally `nil`, it has no effect, but if you set it to, e.g., `'("\\*scratch\\*")`, the `*scratch*` buffer is offered for switching even when you're in a project.
+Note that `nswbuff-projectile-buffer-list` has another property: if you're in a project, it adds any buffers in `buffer-list` whose name matches `nswbuff-include-buffer-regexps` to the list of buffers it returns. Since this option is normally `nil`, it has no effect, but if you set it to, e.g., `'("\\*scratch\\*")`, the `*scratch*` buffer is offered for switching even when you're in a project. This, too, moves you out of the project, of course.
 
