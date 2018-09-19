@@ -178,16 +178,16 @@ according to the options `nswbuff-exclude-buffer-regexps',
 `nswbuff-exclude-mode-regexp' and
 `nswbuff-include-buffer-regexps'.
 
-One predefined function is `nswbuff-projectile-buffers', which
+One predefined function is `nswbuff-projectile-buffer-list', which
 returns the buffers in the current projectile project or nil if
 the buffer that is current when switching is initiated is not
 part of a projectile project."
   :group 'nswbuff
   :type '(choice (const :tag "Use Default Buffer List" :value nil)
-                 (const :tag "Use Projectile Buffer List" :value nswbuff-projectile-buffers)
+                 (const :tag "Use Projectile Buffer List" :value nswbuff-projectile-buffer-list)
                  (function :tag "Use Custom Function")))
 
-(defun nswbuff-projectile-buffers ()
+(defun nswbuff-projectile-buffer-list ()
   "Return the buffers of the current Projectile project.
 If the current buffer is not part of a project, return nil."
   (if-let ((projectile-buffers (ignore-errors
