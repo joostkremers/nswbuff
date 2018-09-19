@@ -169,6 +169,32 @@ buffer from the cycle list."
   :group 'nswbuff
   :type '(repeat (regexp :format "%v")))
 
+(defcustom nswbuff-buffer-list-function nil
+  "Function to obtain a list of switchable buffers.
+The list of buffers returned by this function is further filtered
+according to the options `nswbuff-exclude-buffer-regexps',
+`nswbuff-exclude-mode-regexp' and
+`nswbuff-include-buffer-regexps'.
+
+One predefined function is `nswbuff-projectile-buffers', which
+returns the buffers in the current projectile project or nil if
+the buffer that is current when switching is initiated is not
+part of a projectile project."
+  :group 'nswbuff
+  :type '(choice (const :tag "Use Default Buffer List" :value nil)
+                 (const :tag "Use Projectile Buffer List" :value nswbuff-projectile-buffers)
+                 (function :tag "Use Custom Function")))
+
+(defun nswbuff-projectile-buffers ()
+  "Return the buffers of the current Projectile project.
+If the current buffer is not part of a project, return nil."
+  (if-let ((projectile-buffers (ignore-errors
+                                 (projectile-project-buffers))))
+      (append projectile-buffers
+              (seq-filter (lambda (buf)
+                            (nswbuff-include-p (buffer-name buf)))
+                          (buffer-list)))))
+
 (defcustom nswbuff-pre-switch-hook nil
   "Standard hook containing functions to be called before a switch.
 This option can be made buffer-local.  This may be useful for
@@ -324,11 +350,13 @@ iconified frames are also excluded."
                            (not (and nswbuff-this-frame-only
                                      (nswbuff-in-other-frame-p buf)))
                            buf))
-		    (buffer-list)))))
+                    (or (and nswbuff-buffer-list-function
+                             (funcall nswbuff-buffer-list-function))
+                        (buffer-list))))))
     (when blist
       ;; add the current buffer if it would normally be skipped
       (unless (memq (current-buffer) blist)
-	(setq blist (cons (current-buffer) blist))))
+        (push (current-buffer) blist)))
     blist))
 
 (defun nswbuff-window-lines ()
