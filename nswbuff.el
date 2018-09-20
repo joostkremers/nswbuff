@@ -215,10 +215,9 @@ part of a projectile project."
 If the current buffer is not part of a project, return nil."
   (if-let ((projectile-buffers (ignore-errors
                                  (projectile-project-buffers))))
-      (append projectile-buffers
-              (seq-filter (lambda (buf)
-                            (nswbuff-include-p (buffer-name buf)))
-                          (buffer-list)))))
+      (dolist (buf (buffer-list) projectile-buffers)
+        (if (nswbuff-include-p (buffer-name buf))
+            (add-to-list 'projectile-buffers buf :append #'eq)))))
 
 (defcustom nswbuff-pre-switch-hook nil
   "Standard hook containing functions to be called before a switch.
