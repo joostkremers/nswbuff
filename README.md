@@ -22,7 +22,7 @@ In a default setup, executing `nswbuff-switch-to-next-buffer` once has the follo
 
 ![nswbuff screen shot 1](default-setup.png)
 
-The bottom of the frame shows the list of buffers. Special buffers (those whose names start with `*`) are in red. The buffer marked in bold red will become active after a short delay or when any key is pressed. The first buffer in the list is the one you're switching from, which is still visible in the main window. Executing `nswbuff-switch-to-next-buffer` again will highlight the next buffer in the list (`*ielm*` in the screen shot).
+The bottom of the frame shows the list of buffers. Special buffers (those whose names start with `*`) are in red. The buffer marked in bold red will become active after a short delay or when any key is pressed. The first buffer in the list is the one you're switching from, which is still visible in the main window. Executing `nswbuff-switch-to-next-buffer` again will highlight the next buffer in the list (`*scratch*` in the screen shot).
 
 If you wish to make the intermediate buffers visible during cycling, you can set the option `nswbuff-display-intermediate-buffers` to `t`:
 
