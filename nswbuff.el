@@ -364,19 +364,16 @@ excluded, unless they match one of the regular expressions in
 `include-buffer-regexps'.  If `nswbuff-this-frame-only' is
 non-nil, buffers that are currently displayed in other visible or
 iconified frames are also excluded."
-  (let ((blist
-         (delq nil (mapcar
-                    (lambda (buf)
-                      (and (not (buffer-local-value 'nswbuff-exclude buf))
-                           (not (nswbuff-exclude-mode-p buf))
-                           (or (nswbuff-include-p (buffer-name buf))
-                               (not (nswbuff-exclude-p (buffer-name buf))))
-                           (not (and nswbuff-this-frame-only
-                                     (nswbuff-in-other-frame-p buf)))
-                           buf))
-                    (or (and nswbuff-buffer-list-function
-                             (funcall nswbuff-buffer-list-function))
-                        (buffer-list))))))
+  (let ((blist (seq-filter (lambda (buf)
+                             (and (not (buffer-local-value 'nswbuff-exclude buf))
+                                  (not (nswbuff-exclude-mode-p buf))
+                                  (or (nswbuff-include-p (buffer-name buf))
+                                      (not (nswbuff-exclude-p (buffer-name buf))))
+                                  (not (and nswbuff-this-frame-only
+                                            (nswbuff-in-other-frame-p buf)))))
+                           (or (and nswbuff-buffer-list-function
+                                    (funcall nswbuff-buffer-list-function))
+                               (buffer-list)))))
     (when blist
       ;; add the current buffer if it would normally be skipped
       (unless (memq (current-buffer) blist)
