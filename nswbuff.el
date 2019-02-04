@@ -45,13 +45,13 @@
 ;;
 ;; Buffers can also be excluded by major mode using the option
 ;; `nswbuff-exclude-mode-regexp'.
-
+;;
 ;; The option `nswbuff-include-buffer-regexps' defines a list of regular
 ;; expressions of buffers that must be included, even if they already match a
 ;; regexp in `nswbuff-exclude-buffer-regexps'.  (The same could be done by using
 ;; more sophisticated exclude regexps, but this option keeps the regexps cleaner
 ;; and easier to understand.)
-
+;;
 ;; You can further customize the list of switchable buffers by setting the
 ;; option `nswbuff-buffer-list-function' to a function that returns a list of
 ;; buffers.  Only the buffers returned by this function will be offered for
@@ -81,16 +81,6 @@
 ;; still stay in switching mode.  The timeout is only a visual
 ;; thing.  If you want it to have the same effect as using the buffer,
 ;; set `nswbuff-clear-delay-ends-switching' to t.
-;;
-;; The leftmost item in the status window is the active buffer before
-;; switching started.  If you want the buffer /after/ switching started
-;; there, set `nswbuff-display-original-buffer-first' to nil.
-;;
-;; To install and use, put this file on your Emacs-Lisp load path and
-;; add the following into your ~/.emacs startup file:
-;;
-;; (require 'nswbuff)
-;;
 
 ;;; History:
 ;;
