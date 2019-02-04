@@ -12,8 +12,6 @@
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/joostkremers/nswbuff
 
-(defconst nswbuff-version "1.0")
-
 ;; This file is not part of Emacs
 
 ;; This program is free software; you can redistribute it and/or
