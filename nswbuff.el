@@ -1,4 +1,4 @@
-;;; nswbuff.el --- Quick switching between buffers.
+;;; nswbuff.el --- Quick switching between buffers.  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 1998, 2000, 2001, 2003, 2004 by David Ponce
 ;; Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
