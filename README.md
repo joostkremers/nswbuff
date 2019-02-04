@@ -4,7 +4,7 @@
 
 ## Installation ##
 
-For now, installation is manually. Download the library, put it somewhere in your `load-path` and put `(require 'nswbuff)` in your `init.el` file. Alternatively, if you use `use-package`, you can use the following snippet, assuming that you put the library in `~/src/nswbuff` and you want to use `Ctrl-TAB` and `Shift-Ctrl-TAB` for buffer cycling:
+For now, installation is done manually. Download the library, put it somewhere in your `load-path` and put `(require 'nswbuff)` in your `init.el` file. Alternatively, if you use `use-package`, you can use the following snippet, assuming that you put the library in `~/src/nswbuff` and you want to use `Ctrl-TAB` and `Shift-Ctrl-TAB` for buffer cycling:
 
 ```
 (use-package nswbuff
@@ -37,11 +37,13 @@ The buffers that `nswbuff` offers for cycling are essentially the buffers return
 
 Buffers can also be excluded based on their major mode through the option `nswbuff-exclude-mode-regexps`. These regexps are matched against the `symbol-name` of the buffer's major mode.
 
-Buffers that match either of these options but should be included anyway can be matched using the option `nswbuff-include-buffer-regexps`. Any buffer matching one of the regexps in this list is included, regardless of whether they also match an exclude regexp. Obviously, the same effect can also be obtained by using more specialized exclude regexps, but using an include regexp is usually easier to understand and less error-prone.
+Buffers that match one of these options but should be included anyway can be matched using the option `nswbuff-include-buffer-regexps`. Any buffer matching one of the regexps in this list is included, regardless of whether they also match an exclude regexp. Obviously, the same effect can also be obtained by using more specialized exclude regexps, but using an include regexp is usually easier to understand and less error-prone.
 
-A final option for customizing the list of switchable buffers is `nswbuff-buffer-list-function`. This can be set to a function that returns a list of buffers, making only those buffers switchable instead of all buffers returned by `buffer-list`. Note that this list of buffers is still matched against `nswbuff-exclude-buffer-regexps`, `nswbuff-exclude-mode-regexps` and `nswbuff-include-buffer-regexps`, so set (or keep) these to `nil` if you don't want this.
+Another option for customizing the list of switchable buffers is `nswbuff-buffer-list-function`. This can be set to a function that returns a list of buffers, making only those buffers switchable instead of all buffers returned by `buffer-list`. If the function in `nswbuff-buffer-list-function` returns `nil`, `nswbuff` falls back to the buffers returned by `buffer-list`.
 
-If the function in `nswbuff-buffer-list-function` returns `nil`, the buffers returned by `buffer-list` are used instead.
+Note that the list of buffers returned by the function in `nswbuff-buffer-list-function` is still matched against `nswbuff-exclude-buffer-regexps`, `nswbuff-exclude-mode-regexps` and `nswbuff-include-buffer-regexps`, so set (or keep) these to `nil` if you don't want this.
+
+Lastly, buffers can be excluded through a buffer-local variable `nswbuff-exclude`. This variable can be set to `t` in a file-local variable block or in a `.dir-locals.el` file to exclude specific files from switching that cannot be easily captured in another way. For example, if you want to exclude certain Org files (e.g., the agenda files) from the buffer list without excluding all Org files, you could use this method.
 
 
 ## Customization ##
