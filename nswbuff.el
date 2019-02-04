@@ -1,4 +1,4 @@
-;;; nswbuff.el --- Quick switching between Emacs buffers.
+;;; nswbuff.el --- Quick switching between buffers.
 
 ;; Copyright (C) 1998, 2000, 2001, 2003, 2004 by David Ponce
 ;; Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
@@ -10,6 +10,7 @@
 ;; Keywords: extensions convenience
 ;; Package-Version: 1.0
 ;; Package-Requires: ((emacs "25.1"))
+;; URL: https://github.com/joostkremers/nswbuff
 
 (defconst nswbuff-version "1.0")
 
