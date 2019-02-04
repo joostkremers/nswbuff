@@ -325,8 +325,8 @@ timer changes the current window.")
   (let ((map (make-sparse-keymap)))
     map)
   "Override map for nswbuff.
-This map becomes active whenever nswbuff-switch-to-next-buffer or
-nswbuff-switch-to-previous-buffer is invoked.  It can be used to
+This map becomes active whenever ‘nswbuff-switch-to-next-buffer’ or
+‘nswbuff-switch-to-previous-buffer’ is invoked.  It can be used to
 bind functions for buffer handling which then become available
 during buffer switching.")
 
@@ -641,7 +641,7 @@ This function is called directly by the nswbuff timer."
             nswbuff-status-window        nil))))
 
 (defun nswbuff-start-switching ()
-  "Make sure nswbuff-buffer-list-holder is set before proceeding."
+  "Make sure ‘nswbuff-buffer-list-holder’ is set before proceeding."
   (or nswbuff-buffer-list-holder
       (setq nswbuff-buffer-list-holder (nswbuff-buffer-list))))
 
