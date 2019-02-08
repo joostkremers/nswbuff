@@ -5,6 +5,8 @@
 ;; Copyright (C) 2017, 2018, 2019 Joost Kremers
 
 ;; Author: David Ponce <david@dponce.com>
+;;         Kahlil (Kal) HODGSON <dorge@tpg.com.au>
+;;         Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 18 May 2017
 ;; Keywords: extensions convenience
