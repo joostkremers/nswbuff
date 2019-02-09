@@ -39,7 +39,7 @@ Note that the list of buffers returned by the function in `nswbuff-buffer-list-f
 Lastly, buffers can be excluded through a buffer-local variable `nswbuff-exclude`. This variable can be set to `t` in a file-local variable block or in a `.dir-locals.el` file to exclude specific files from switching that cannot be easily captured in another way. For example, if you want to exclude certain Org files (e.g., the agenda files) from the buffer list without excluding all Org files, you could use this method.
 
 
-## Customization ##
+## Further Customization ##
 
 Quite a few aspects of `nswbuff` can be customized in addition to the ones already mentioned. See the customization group `nswbuff` for details.
 
