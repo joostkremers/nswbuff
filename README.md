@@ -4,15 +4,8 @@
 
 ## Installation ##
 
-For now, installation is done manually. Download the library, put it somewhere in your `load-path` and put `(require 'nswbuff)` in your `init.el` file. Alternatively, if you use `use-package`, you can use the following snippet, assuming that you put the library in `~/src/nswbuff` and you want to use `Ctrl-TAB` and `Shift-Ctrl-TAB` for buffer cycling:
+`nswbuff` can be installed through [Melpa](https://melpa.org/#/nswbuff).
 
-```
-(use-package nswbuff
-  :commands (nswbuff-switch-to-next-buffer nswbuff-switch-to-previous-buffer)
-  :load-path "~/src/nswbuff/"
-  :bind (("<C-tab>" . nswbuff-switch-to-next-buffer)
-         ("<C-S-iso-lefttab>" . nswbuff-switch-to-previous-buffer)))
-```
 
 ## Primary commands ##
 
