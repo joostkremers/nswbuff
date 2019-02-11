@@ -192,10 +192,14 @@ according to the options `nswbuff-exclude-buffer-regexps',
 `nswbuff-exclude-mode-regexp' and
 `nswbuff-include-buffer-regexps'.
 
-One predefined function is `nswbuff-projectile-buffer-list', which
-returns the buffers in the current projectile project or nil if
-the buffer that is current when switching is initiated is not
-part of a projectile project."
+The function should return a list of buffers or nil if no
+eligible buffers exist.  When nil is returned, buffer switching
+defaults to the standard `buffer-list' function.
+
+One predefined function is `nswbuff-projectile-buffer-list',
+which returns the buffers in the current projectile project plus
+any buffers from the standard buffer list that match
+`nswbuff-include-buffer-regexps'."
   :group 'nswbuff
   :type '(choice (const :tag "Use Default Buffer List" :value nil)
                  (const :tag "Use Projectile Buffer List" :value nswbuff-projectile-buffer-list)
