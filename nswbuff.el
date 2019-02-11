@@ -207,7 +207,9 @@ any buffers from the standard buffer list that match
 
 (defun nswbuff-projectile-buffer-list ()
   "Return the buffers of the current Projectile project.
-If the current buffer is not part of a project, return nil."
+Added to the list are buffers that are not part of the current
+project but that match `nswbuff-include-buffer-regexps'.  If the
+current buffer is not part of a project, return nil."
   (if-let ((projectile-buffers (ignore-errors
                                  (projectile-project-buffers))))
       (dolist (buf (buffer-list) projectile-buffers)
