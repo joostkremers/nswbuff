@@ -50,3 +50,9 @@ Quite a few aspects of `nswbuff` can be customized in addition to the ones alrea
 
 Note that `nswbuff-projectile-buffer-list` has another property: if you're in a project, it adds any buffers in `buffer-list` whose name matches `nswbuff-include-buffer-regexps` to the list of buffers it returns. Since this option is normally `nil`, it has no effect, but if you set it to, e.g., `'("\\*scratch\\*")`, the `*scratch*` buffer is offered for switching even when you're in a project. This, too, moves you out of the project, of course.
 
+
+
+## `golden-ratio` / `zoom` ##
+
+Packages such as [zoom](https://github.com/cyrus-and/zoom) and [golden-ratio](https://github.com/roman/golden-ratio.el) automatically resize windows to ensure that the active window always has a certain minimum size. There is no point in resizing the buffer switching window, however, so in order to prevent that from happening, you should add the name of the `nswbuff` status buffer to `golden-ratio-exclude-buffer-names` or `zoom-ignored-buffer-names`. This name defaults to `" *nswbuff*"` (without the double quotes; note the initial space).
+
