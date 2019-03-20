@@ -51,11 +51,6 @@
 ;; The bufferlist is sorted by how recently the buffers were used.  If you
 ;; prefer a fixed (cyclic) order set `nswbuff-recent-buffers-first' to nil.
 ;;
-;; When the status window disappears because of the clear-delay you still stay
-;; in switching mode.  The timeout is only a visual thing.  If you want it to
-;; have the same effect as using the buffer, set
-;; `nswbuff-clear-delay-ends-switching' to t.
-;;
 ;; There are several options to manipulate the list of switchable buffers.
 ;; The option `nswbuff-exclude-buffer-regexps' defines a list of regular
 ;; expressions for excluded buffers.  The default setting excludes
