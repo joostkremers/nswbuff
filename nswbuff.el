@@ -439,15 +439,15 @@ BCURR is the buffer name to highlight."
          (lines 0)
          (adjust (or (eq nswbuff-status-window-layout 'adjust)
                      (nswbuff-one-window-p window)))
-         ;; okay, its crazy logic but it works:-)
+         ;; Okay, it's crazy logic but it works. :-)
          (half-way (1- (/
-                        (if (= (% (length blist) 2) 0) ;; if even ...
+                        (if (= (% (length blist) 2) 0) ;; If even ...
                             (length blist)
-                          (1+ (length blist))) ;; make it even
+                          (1+ (length blist))) ;; make it even.
                         2)))
          start end buffer bname fillr)
     (when nswbuff-start-with-current-centered
-      ;; rearrange blist so that the first elt is in the middle
+      ;; Rearrange blist so that the first elt is in the middle
       (setq blist (append (last blist half-way)      ;; last half
                           (butlast blist half-way)))) ;; first half
     (save-selected-window
@@ -466,7 +466,7 @@ BCURR is the buffer name to highlight."
           (setq bname (buffer-name buffer)
                 start (point)
                 fillr (if blist separ trail))
-          ;; add a newline if we will run out of space
+          ;; Add a newline if we will run out of space.
           (when (and adjust
                      (> (- (+ start (length bname)
                               (length (concat left fillr right)))
@@ -481,7 +481,7 @@ BCURR is the buffer name to highlight."
                start (point) '(face nswbuff-separator-face)))
           (setq start (point))
           (insert bname)
-          ;; highlight it if it is the current one
+          ;; Highlight it if it is the current one.
           (cond
            ((string-equal bname bcurr)
             (setq end (point))
@@ -525,8 +525,8 @@ after the delay specified by `nswbuff-clear-delay'."
         (with-current-buffer (get-buffer-create nswbuff-status-buffer-name)
           (let ((window (or (get-buffer-window nswbuff-status-buffer-name)
                             (split-window-vertically -2))))
-            ;; if we forget this we may end up with multiple status
-            ;; windows (kal)
+            ;; If we forget this we may end up with multiple status
+            ;; windows (kal).
             (setq nswbuff-status-window window)
             (set-window-buffer window (current-buffer))
             (nswbuff-layout-status-line window buffer-name)
@@ -612,22 +612,22 @@ This function is called directly by the nswbuff timer."
     (unwind-protect
         (when (and nswbuff-initial-buffer nswbuff-current-buffer)
           (save-window-excursion
-            ;; Because this may be called from a timer we have to be real
-            ;; careful that we are in the right frame, window and buffer
-            ;; at that time --- other timers (eg those called by
-            ;; speedbar) may put us elsewhere:-)
+            ;; Because this may be called from a timer we have to be really
+            ;; careful that we are in the right frame, window and buffer at that
+            ;; time --- other timers (e.g., those called by speedbar) may put us
+            ;; elsewhere. :-)
             (select-frame nswbuff-initial-frame)
             (select-window nswbuff-initial-window)
-            ;; reset visit order to what it was before the sequence began
+            ;; Reset visit order to what it was before the sequence began.
             (while (setq buffer (car buffer-list))
               (switch-to-buffer buffer)
               (setq buffer-list (cdr buffer-list))))
-          ;; then switch between the first and last buffers in the sequence
+          ;; Then switch between the first and last buffers in the sequence.
           (and nswbuff-initial-buffer
                (switch-to-buffer nswbuff-initial-buffer))
           (and nswbuff-current-buffer
                (switch-to-buffer nswbuff-current-buffer)))
-      ;; protect forms
+      ;; Protect forms.
       (setq nswbuff-initial-buffer       nil
             nswbuff-initial-buffer-list nil
             nswbuff-current-buffer       nil
@@ -691,7 +691,7 @@ This function is called directly by the nswbuff timer."
   (run-hooks 'nswbuff-pre-switch-hook)
   (if nswbuff-initial-buffer
       (nswbuff-next-buffer)
-    ;; first call in the sequence
+    ;; First call in the sequence.
     (nswbuff-initialize)
     (unless nswbuff-delay-switch
       (nswbuff-next-buffer)))
