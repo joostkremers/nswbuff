@@ -525,6 +525,7 @@ after the delay specified by `nswbuff-clear-delay'."
             (window-min-height 1)
             (cursor-in-non-selected-windows nil))
         (with-current-buffer (get-buffer-create nswbuff-status-buffer-name)
+          (setq cursor-type nil)
           (let ((window (or (get-buffer-window nswbuff-status-buffer-name)
                             (split-window-vertically -2))))
             ;; If we forget this we may end up with multiple status
