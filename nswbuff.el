@@ -118,7 +118,7 @@ width.  The possible choices are:
   :type '(number :tag "Seconds"))
 
 (defcustom nswbuff-recent-buffers-first t
-  "Show recent buffers first?
+  "Show recent buffers first.
 If non-nil the buffer list is sorted by how recently the buffers were
 used.  If nil, it is as a cyclic list with fixed order.  Note that
 other commands (switch-to-buffer) still change the order."
@@ -126,7 +126,9 @@ other commands (switch-to-buffer) still change the order."
   :type 'boolean)
 
 (defcustom nswbuff-separator " | "
-  "String used to separate buffer names in the status line."
+  "String used to separate buffer names in the status line.
+It is possible to include a newline character in order to obtain
+a vertical buffer display."
   :group 'nswbuff
   :type 'string)
 
