@@ -10,7 +10,7 @@
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 18 May 2017
 ;; Keywords: extensions convenience
-;; Package-Version: 1.0
+;; Package-Version: 1.1
 ;; Package-Requires: ((emacs "25.1"))
 ;; URL: https://github.com/joostkremers/nswbuff
 
@@ -142,16 +142,23 @@ a vertical buffer display."
   :group 'nswbuff
   :type 'string)
 
-(defcustom nswbuff-window-min-text-height 1
+(defcustom nswbuff-status-window-at-top nil
+  "If set, put the status window at the top of the current window."
+  :group 'nswbuff
+  :type 'boolean)
+
+(define-obsolete-variable-alias 'nswbuff-window-min-text-height 'nswbuff-status-window-min-text-height "1.1")
+
+(defcustom nswbuff-status-window-min-text-height 1
   "Minimum text height of the status window."
   :group 'nswbuff
   :type 'integer)
 
-(defface nswbuff-default-face '((t (:inherit default)))
+(defface nswbuff-default-face '((t (:inherit highlight)))
   "Default face used for buffer names."
   :group 'nswbuff)
 
-(defface nswbuff-current-buffer-face '((t (:inherit highlight)))
+(defface nswbuff-current-buffer-face '((t (:inherit font-lock-keyword-face)))
   "Face used to highlight the current buffer name."
   :group 'nswbuff)
 
@@ -316,6 +323,9 @@ for a detailed format description."
 This window is saved in case any external code that runs on a
 timer changes the current window.")
 
+(defvar nswbuff-status-buffer nil
+  "The status buffer.")
+
 (defvar nswbuff-display-timer nil "The timer used to remove the status window after 'nswbuff-clear-delay'.")
 
 (defvar nswbuff-override-map
@@ -326,6 +336,17 @@ This map becomes active whenever ‘nswbuff-switch-to-next-buffer’ or
 ‘nswbuff-switch-to-previous-buffer’ is invoked.  It can be used to
 bind functions for buffer handling which then become available
 during buffer switching.")
+
+(defun nswbuff-get-status-buffer ()
+  "Create or return the nswbuff status buffer."
+  (if (buffer-live-p nswbuff-status-buffer)
+      nswbuff-status-buffer
+    (let ((buffer (get-buffer-create nswbuff-status-buffer-name)))
+      (with-current-buffer buffer
+        (set (make-local-variable 'face-remapping-alist)
+             '((default nswbuff-default-face)))
+        (setq cursor-type nil)
+        (setq nswbuff-status-buffer (current-buffer))))))
 
 (defun nswbuff-initialize ()
   "Initialize nswbuff variables prior to a switch sequence."
@@ -388,7 +409,7 @@ buffer if any wrap on the display due to their length."
   "Adjust window height to fit its buffer contents.
 If optional TEXT-HEIGHT is non-nil adjust window height to this
 value."
-  (setq text-height (max nswbuff-window-min-text-height
+  (setq text-height (max nswbuff-status-window-min-text-height
                          (or text-height
                              (nswbuff-window-lines))))
   (if (fboundp 'set-window-text-height)
@@ -524,10 +545,11 @@ after the delay specified by `nswbuff-clear-delay'."
       (let ((buffer-name (buffer-name nswbuff-current-buffer))
             (window-min-height 1)
             (cursor-in-non-selected-windows nil))
-        (with-current-buffer (get-buffer-create nswbuff-status-buffer-name)
-          (setq cursor-type nil)
+        (with-current-buffer (nswbuff-get-status-buffer)
           (let ((window (or (get-buffer-window nswbuff-status-buffer-name)
-                            (split-window-vertically -2))))
+                            (if nswbuff-status-window-at-top
+                                (split-window nil (- nswbuff-status-window-min-text-height) 'above)
+                              (split-window-vertically (- nswbuff-status-window-min-text-height))))))
             ;; If we forget this we may end up with multiple status
             ;; windows (kal).
             (setq nswbuff-status-window window)
