@@ -346,6 +346,7 @@ during buffer switching.")
         (set (make-local-variable 'face-remapping-alist)
              '((default nswbuff-default-face)))
         (setq cursor-type nil)
+        (setq mode-line-format nswbuff-mode-line-format)
         (setq nswbuff-status-buffer (current-buffer))))))
 
 (defun nswbuff-initialize ()
@@ -475,7 +476,6 @@ BCURR is the buffer name to highlight."
                           (butlast blist half-way)))) ;; first half
     (save-selected-window
       (select-window window)
-      (setq mode-line-format nswbuff-mode-line-format)
       (erase-buffer)
       (setq start (point))
       (insert head)
