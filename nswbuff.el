@@ -346,7 +346,6 @@ during buffer switching.")
         (set (make-local-variable 'face-remapping-alist)
              '((default nswbuff-default-face)))
         (setq cursor-type nil)
-        (setq window-size-fixed t)
         (setq mode-line-format nswbuff-mode-line-format)
         (setq nswbuff-status-buffer (current-buffer))))))
 
