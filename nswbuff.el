@@ -217,12 +217,12 @@ any buffers from the standard buffer list that match
 Added to the list are buffers that are not part of the current
 project but that match `nswbuff-include-buffer-regexps'.  If the
 current buffer is not part of a project, return nil."
-  (if-let ((projectile-buffers (ignore-errors
-                                 (projectile-project-buffers))))
-      (dolist (buf (buffer-list) projectile-buffers)
-        (if (and (nswbuff-include-p (buffer-name buf))
-                 (not (memq buf projectile-buffers)))
-            (setq projectile-buffers (append projectile-buffers (list buf)))))))
+  (if (projectile-project-p default-directory)
+      (let ((projectile-buffers (projectile-project-buffers)))
+        (dolist (buf (buffer-list) projectile-buffers)
+          (if (and (nswbuff-include-p (buffer-name buf))
+                   (not (memq buf projectile-buffers)))
+              (setq projectile-buffers (append projectile-buffers (list buf))))))))
 
 (defcustom nswbuff-pre-switch-hook nil
   "Standard hook containing functions to be called before a switch.
