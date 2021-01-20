@@ -101,16 +101,18 @@
 This occurs when the buffer list is larger than the status window
 width.  The possible choices are:
 
-- - 'Default' If there is only one window in the frame (ignoring the
-              minibuffer one and the status window itself) the status
-              window height is adjusted.
-              Otherwise horizontal scrolling is used.
-- - 'Scroll'  Horizontal scrolling is always used.
-- - 'Adjust'  Only adjust the window height."
+- - 'Default'    If there is only one window in the frame (ignoring the
+                 minibuffer one and the status window itself) the status
+                 window height is adjusted.
+                 Otherwise horizontal scrolling is used.
+- - 'Scroll'     Horizontal scrolling is always used.
+- - 'Adjust'     Only adjust the window height.
+- - 'Minibuffer' Use the minibuffer."
   :group 'nswbuff
-  :type '(choice (const :tag "Default" nil)
-                 (const :tag "Scroll"  scroll)
-                 (const :tag "Adjust"  adjust)))
+  :type '(choice (const :tag "Default"     nil)
+                 (const :tag "Scroll"      scroll)
+                 (const :tag "Adjust"      adjust)
+                 (const :tag "Minibuffer"  minibuffer)))
 
 (defcustom nswbuff-clear-delay 3
   "Time in seconds to delay before discarding the status window."
@@ -301,9 +303,6 @@ for a detailed format description."
 
 ;;; Internals
 ;;
-(defconst nswbuff-status-buffer-name " *nswbuff*"
-  "Name of the working buffer used by nswbuff to display the buffer list.")
-
 (defvar nswbuff-buffer-list nil "List of currently switchable buffers.")
 
 ;; Store the initial buffer-list, buffer, window, and frame at the
@@ -337,11 +336,15 @@ This map becomes active whenever ‘nswbuff-switch-to-next-buffer’ or
 bind functions for buffer handling which then become available
 during buffer switching.")
 
+(defun nswbuff-status-buffer-name ()
+  "Name of the working buffer used by nswbuff to display the buffer list."
+  (if (eq nswbuff-status-window-layout 'minibuffer) " *Minibuf-0*" " *nswbuff*"))
+
 (defun nswbuff-get-status-buffer ()
   "Create or return the nswbuff status buffer."
   (if (buffer-live-p nswbuff-status-buffer)
       nswbuff-status-buffer
-    (let ((buffer (get-buffer-create nswbuff-status-buffer-name)))
+    (let ((buffer (get-buffer-create (nswbuff-status-buffer-name))))
       (with-current-buffer buffer
         (set (make-local-variable 'face-remapping-alist)
              '((default nswbuff-default-face)))
@@ -546,7 +549,8 @@ after the delay specified by `nswbuff-clear-delay'."
             (window-min-height 1)
             (cursor-in-non-selected-windows nil))
         (with-current-buffer (nswbuff-get-status-buffer)
-          (let ((window (or (get-buffer-window nswbuff-status-buffer-name)
+          (let ((window (or (and (eq nswbuff-status-window-layout 'minibuffer) (minibuffer-window))
+                            (get-buffer-window (nswbuff-status-buffer-name))
                             (if nswbuff-status-window-at-top
                                 (split-window nil (- nswbuff-status-window-min-text-height) 'above)
                               (split-window-vertically (- nswbuff-status-window-min-text-height))))))
@@ -589,7 +593,7 @@ regexps in `nswbuff-exclude-mode-regexps'."
   "Return non-nil if BUFFER should be excluded from the buffer list.
 BUFFER should be a buffer name.  It is tested against the regular expressions in
 `nswbuff-exclude-buffer-regexps', and if one matches, BUFFER is excluded."
-  (let ((rl (cons (regexp-quote nswbuff-status-buffer-name)
+  (let ((rl (cons (regexp-quote (nswbuff-status-buffer-name))
                   (delete "" nswbuff-exclude-buffer-regexps))))
     (while (and rl (car rl) (not (string-match-p (car rl) buffer)))
       (setq rl (cdr rl)))
@@ -629,11 +633,12 @@ BUFFER should be a buffer name.  It is tested against the regular expressions in
 (defun nswbuff-discard-status-window ()
   "Discard the status window.
 This function is called directly by the nswbuff timer."
-  (let ((buffer (get-buffer nswbuff-status-buffer-name))
+  (let ((buffer (get-buffer (nswbuff-status-buffer-name)))
         (buffer-list (nreverse nswbuff-initial-buffer-list)))
-    (if (window-live-p nswbuff-status-window)
+    (if (and (window-live-p nswbuff-status-window)
+             (not (eq nswbuff-status-window-layout 'minibuffer)))
         (delete-window nswbuff-status-window))
-    (if buffer (kill-buffer buffer))
+    (if buffer (with-current-buffer buffer (erase-buffer)))
     (unwind-protect
         (when (and nswbuff-initial-buffer nswbuff-current-buffer)
           (save-window-excursion
