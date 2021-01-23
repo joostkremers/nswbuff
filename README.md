@@ -21,7 +21,7 @@ Buffer switching ends automatically after a short delay, or when you press any k
 
 ![nswbuff screen shot 2](custom-setup.png)
 
-This screen shot shows the same buffer switch, from `nswbuff.el` to `README.md`, but this time the `README.md` buffer is shown during switching. Executing `nswbuff-switch-to-next-buffer` would show the `*scratch*` buffer. Note that the screen shot also shows that the face and colors used for displaying the buffer names are fully customizable.
+This screen shot shows the same buffer switch, from `nswbuff.el` to `README.md`, but this time the `README.md` buffer is shown during switching. Executing `nswbuff-switch-to-next-buffer` would show the `*scratch*` buffer. Note that the screen shot also shows that the face and colours used for displaying the buffer names are fully customisable.
 
 
 ## Customizing the buffer list ##
