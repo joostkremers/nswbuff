@@ -336,6 +336,12 @@ This map becomes active whenever ‘nswbuff-switch-to-next-buffer’ or
 bind functions for buffer handling which then become available
 during buffer switching.")
 
+;; Make sure status buffer is reset when window layout is changed.
+(add-variable-watcher
+ 'nswbuff-status-window-layout
+ (lambda (_oldval _newval _operation _where)
+   (setq nswbuff-status-buffer nil)))
+
 (defun nswbuff-status-buffer-name ()
   "Name of the working buffer used by nswbuff to display the buffer list."
   (if (eq nswbuff-status-window-layout 'minibuffer) " *Minibuf-0*" " *nswbuff*"))
@@ -632,10 +638,13 @@ BUFFER should be a buffer name.  It is tested against the regular expressions in
 This function is called directly by the nswbuff timer."
   (let ((buffer (get-buffer (nswbuff-status-buffer-name)))
         (buffer-list (nreverse nswbuff-initial-buffer-list)))
-    (if (and (window-live-p nswbuff-status-window)
-             (not (eq nswbuff-status-window-layout 'minibuffer)))
+    ;; Cleanup status window and status buffer
+    (if (eq nswbuff-status-window-layout 'minibuffer)
+        (with-current-buffer buffer (erase-buffer))
+      (when (window-live-p nswbuff-status-window)
         (delete-window nswbuff-status-window))
-    (if buffer (with-current-buffer buffer (erase-buffer)))
+      (when buffer
+        (kill-buffer buffer)))
     (unwind-protect
         (when (and nswbuff-initial-buffer nswbuff-current-buffer)
           (save-window-excursion
