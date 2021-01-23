@@ -535,9 +535,6 @@ BCURR is the buffer name to highlight."
         (nswbuff-adjust-window 1)
         (nswbuff-scroll-window end)))))
 
-(defvar nswbuff-timer nil
-  "Timer used to discard the status window.")
-
 (defun nswbuff-show-status-window ()
   "Pop-up the nswbuff status window at the bottom of the selected window.
 The status window shows the list of switchable buffers where the
@@ -664,22 +661,6 @@ This function is called directly by the nswbuff timer."
             nswbuff-initial-frame        nil
             nswbuff-initial-window       nil
             nswbuff-status-window        nil))))
-
-(defun nswbuff-start-switching ()
-  "Make sure ‘nswbuff-buffer-list-holder’ is set before proceeding."
-  (or nswbuff-buffer-list-holder
-      (setq nswbuff-buffer-list-holder (nswbuff-buffer-list))))
-
-(defun nswbuff-end-switching ()
-  "Called when the buffer finally is choosen."
-  (if nswbuff-recent-buffers-first
-      (let ((bcurr (current-buffer))
-            (l (nreverse nswbuff-buffer-list-holder)))
-        (while l
-          (switch-to-buffer (car l))
-          (setq l (cdr l)))
-        (switch-to-buffer bcurr)))
-  (setq nswbuff-buffer-list-holder nil))
 
 (defun nswbuff-previous-buffer ()
   "Display and activate the buffer at the end of the buffer list."
