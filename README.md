@@ -41,8 +41,9 @@ Lastly, buffers can be excluded through a buffer-local variable `nswbuff-exclude
 
 ## Further Customization ##
 
-Quite a few aspects of `nswbuff` can be customized in addition to the ones already mentioned. See the customization group `nswbuff` for details.
+Quite a few aspects of `nswbuff` can be customized in addition to the ones already mentioned. See the customization group `nswbuff` for details. One option worth pointing out here is `nswbuff-status-window-layout`, which controls how the window displaying the list of buffers during switching is laid out. Normally, the buffer shows the list of buffers on a single line, but if the number of buffers grows too large, you can either choose to scroll the buffer list horizontally (so that not all buffers names are visible in the `nswbuff` status window), or you can decide to adjust the status window's height. The default value is a combination of these two options: if there is only one window in the frame, the status window's height is adjusted, otherwise the buffer list is scrolled.
 
+Alternatively, you can set `nswbuff-status-window-layout` to `minibuffer`, in which case the minibuffer will be used to display the buffer list.
 
 ## Projectile ##
 
