@@ -410,7 +410,7 @@ iconified frames are also excluded."
     blist))
 
 (defun nswbuff-window-lines ()
-  "Return the number of lines in current buffer.
+  "Return the number of lines in the current buffer.
 This number may be greater than the number of actual lines in the
 buffer if any wrap on the display due to their length."
   (count-lines (point-min) (point-max)))
