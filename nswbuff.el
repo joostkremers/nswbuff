@@ -664,12 +664,12 @@ This function is called directly by the nswbuff timer."
           (and nswbuff-current-buffer
                (switch-to-buffer nswbuff-current-buffer)))
       ;; Protect forms.
-      (setq nswbuff-initial-buffer       nil
+      (setq nswbuff-initial-buffer      nil
             nswbuff-initial-buffer-list nil
-            nswbuff-current-buffer       nil
-            nswbuff-initial-frame        nil
-            nswbuff-initial-window       nil
-            nswbuff-status-window        nil))))
+            nswbuff-current-buffer      nil
+            nswbuff-initial-frame       nil
+            nswbuff-initial-window      nil
+            nswbuff-status-window       nil))))
 
 (defun nswbuff-previous-buffer ()
   "Display and activate the buffer at the end of the buffer list."
