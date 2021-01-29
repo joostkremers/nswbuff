@@ -371,7 +371,7 @@ during buffer switching.")
 This function can be bound to a key in `nswbuff-override-map' to kill
 the current buffer without ending the buffer switching sequence."
   (interactive)
-  (let ((dead-buffer (current-buffer)))
+  (let ((dead-buffer nswbuff-current-buffer))
     (if (condition-case nil (kill-buffer dead-buffer))
         (progn
           (if nswbuff-initial-buffer
@@ -380,10 +380,18 @@ the current buffer without ending the buffer switching sequence."
                     nswbuff-initial-buffer-list
                     (delq dead-buffer nswbuff-initial-buffer-list))
             (nswbuff-initialize))
-          (if (car nswbuff-buffer-list)
-              (progn (switch-to-buffer (car nswbuff-buffer-list))
-                     (nswbuff-show-status-window))
-            (nswbuff-discard-status-window)))
+          ;; Update status info based on remaining buffer list
+          (cond
+           ;; Two or more buffers left
+           ((cadr nswbuff-buffer-list)
+            (nswbuff-previous-buffer)
+            (nswbuff-show-status-window))
+           ;; Only one buffer let
+           ((car nswbuff-buffer-list)
+            (nswbuff-previous-buffer)
+            (nswbuff-discard-status-window))
+           ;; No buffer left
+           (t (nswbuff-discard-status-window))))
       (nswbuff-discard-status-window))))
 
 (defun nswbuff-buffer-list ()
@@ -637,7 +645,7 @@ BUFFER should be a buffer name.  It is tested against the regular expressions in
   "Discard the status window.
 This function is called directly by the nswbuff timer."
   (let ((buffer (get-buffer (nswbuff-status-buffer-name)))
-        (buffer-list (nreverse nswbuff-initial-buffer-list)))
+        (buffer-list (nreverse nswbuff-buffer-list)))
     ;; Cleanup status window and status buffer
     (if (eq nswbuff-status-window-layout 'minibuffer)
         (with-current-buffer buffer (erase-buffer))
