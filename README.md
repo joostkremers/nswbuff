@@ -15,13 +15,13 @@ In a default setup, executing `nswbuff-switch-to-next-buffer` once has the follo
 
 ![nswbuff screen shot 1](default-setup.png)
 
-This screen shot shows a buffer switch from `nswbuff.el` to `README.md`. The bottom of the frame shows the list of buffers. Special buffers (those whose names start with `*`) are in red. The bold red, underlined buffer will become active when buffer switching ends. The first buffer in the list is the one you're switching from, which is still visible in the main window. Executing `nswbuff-switch-to-next-buffer` again will highlight the next buffer in the list (`*scratch*` in the screen shot).
+This screen shot shows a buffer switch from `nswbuff.el` to `README.md`. The bottom of the frame shows the list of buffers. Special buffers (those whose names start with `*`) are in red. The bold red, underlined buffer will become active when buffer switching ends. The first buffer in the list is the one you're switching from, which is still visible in the main window. Executing `nswbuff-switch-to-next-buffer` again will highlight the next buffer in the list (`*ielm*` in the screen shot).
 
 Buffer switching ends automatically after a short delay, or when you press any key (other than the keys bound to `nswbuff-switch-to-next-buffer` and `nswbuff-switch-to-previous-buffer`, obviously). By default, during buffer switching, the initial buffer remains visible until buffer switching ends. If you wish to make the intermediate buffers visible during cycling, you can set the option `nswbuff-display-intermediate-buffers` to `t`:
 
 ![nswbuff screen shot 2](custom-setup.png)
 
-This screen shot shows the same buffer switch, from `nswbuff.el` to `README.md`, but this time the `README.md` buffer is shown during switching. Executing `nswbuff-switch-to-next-buffer` would show the `*scratch*` buffer. Note that the screen shot also shows that the face and colours used for displaying the buffer names are fully customisable.
+This screen shot shows the same buffer switch, from `nswbuff.el` to `README.md`, but this time the `README.md` buffer is shown during switching. Executing `nswbuff-switch-to-next-buffer` again would show the `*eshell*` buffer. Note that the screen shot also shows that the face and colours used for displaying the buffer names are fully customisable.
 
 
 ## Customizing the buffer list ##
