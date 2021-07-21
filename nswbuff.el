@@ -211,21 +211,9 @@ any buffers from the standard buffer list that match
 `nswbuff-include-buffer-regexps'."
   :group 'nswbuff
   :type '(choice (const :tag "Use Default Buffer List" :value nil)
-                 (const :tag "Use Projectile Buffer List" :value nswbuff-projectile-buffer-list)
                  (const :tag "Use Project Buffer List" :value nswbuff-project-buffer-list)
+                 (const :tag "Use Projectile Buffer List" :value nswbuff-projectile-buffer-list)
                  (function :tag "Use Custom Function")))
-
-(defun nswbuff-projectile-buffer-list ()
-  "Return the buffers of the current Projectile project.
-Added to the list are buffers that are not part of the current
-project but that match `nswbuff-include-buffer-regexps'.  If the
-current buffer is not part of a project, return nil."
-  (if (projectile-project-p default-directory)
-      (let ((projectile-buffers (projectile-project-buffers)))
-        (dolist (buf (buffer-list) projectile-buffers)
-          (if (and (nswbuff-include-p (buffer-name buf))
-                   (not (memq buf projectile-buffers)))
-              (setq projectile-buffers (append projectile-buffers (list buf))))))))
 
 (declare-function project-current "ext:project")
 (declare-function project-root "ext:project")
@@ -252,6 +240,18 @@ current buffer is not part of a project, return nil."
                                    (project-current)))
                           (nswbuff-include-p (buffer-name buf)))))
                   (buffer-list)))))
+
+(defun nswbuff-projectile-buffer-list ()
+  "Return the buffers of the current Projectile project.
+Added to the list are buffers that are not part of the current
+project but that match `nswbuff-include-buffer-regexps'.  If the
+current buffer is not part of a project, return nil."
+  (if (projectile-project-p default-directory)
+      (let ((projectile-buffers (projectile-project-buffers)))
+        (dolist (buf (buffer-list) projectile-buffers)
+          (if (and (nswbuff-include-p (buffer-name buf))
+                   (not (memq buf projectile-buffers)))
+              (setq projectile-buffers (append projectile-buffers (list buf))))))))
 
 (defcustom nswbuff-pre-switch-hook nil
   "Standard hook containing functions to be called before a switch.
