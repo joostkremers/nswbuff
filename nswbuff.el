@@ -245,7 +245,8 @@ current buffer is not part of a project, return nil."
 Added to the list are buffers that are not part of the current
 project but that match `nswbuff-include-buffer-regexps'.  If the
 current buffer is not part of a project, return nil."
-  (if (projectile-project-p default-directory)
+  (if (and (fboundp 'projectile-project-p)
+           (projectile-project-p default-directory))
       (let ((projectile-buffers (projectile-project-buffers)))
         (dolist (buf (buffer-list) projectile-buffers)
           (if (and (nswbuff-include-p (buffer-name buf))
