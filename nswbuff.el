@@ -223,7 +223,6 @@ any buffers from the standard buffer list that match
 Added to the list are buffers that are not part of the current
 project but that match `nswbuff-include-buffer-regexps'.  If the
 current buffer is not part of a project, return nil."
-  (require 'project)
   (when-let ((curr-proj (project-current)))
     (let ((conn (file-remote-p (project-root curr-proj))))
       (seq-filter (lambda (buf)
