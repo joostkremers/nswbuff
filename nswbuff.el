@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 1998, 2000, 2001, 2003, 2004 by David Ponce
 ;; Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
-;; Copyright (C) 2017-2020 Joost Kremers
+;; Copyright (C) 2017-2022 Joost Kremers
 
 ;; Author: David Ponce <david@dponce.com>
 ;;         Kahlil (Kal) HODGSON <dorge@tpg.com.au>
