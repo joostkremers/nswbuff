@@ -47,10 +47,7 @@ Alternatively, you can set `nswbuff-status-window-layout` to `minibuffer`, in wh
 
 ## Projects ##
 
-`nswbuff` provides some very simple but nifty integration with the project-management packages `project.el` (built-in) and [`projectile`](http://batsov.com/projectile). If you set `nswbuff-buffer-list-function` to `nswbuff-project-buffer-list` or  `nswbuff-projectile-buffer-list`, only the buffers belonging to the current project are offered for switching.  This makes for a very light-weight (but in my opinion effective) alternative to such modes as [`perspective.el`](https://github.com/nex3/perspective-el) or [`persp-mode`](https://github.com/Bad-ptr/persp-mode.el). Switching buffers with `nswbuff` keeps you in the project, any other buffer-switching method (`C-x b`, selectrum, ivy, helm, or what have you) is not affected and can thus be used to move out of the project.
-
-Note that the functions `nswbuff-project-buffer-list` and `nswbuff-projectile-buffer-list` have another property: if you're in a project, it adds any buffers in `buffer-list` whose name matches `nswbuff-include-buffer-regexps` to the list of buffers it returns. Since this option is normally `nil`, it has no effect, but if you set it to, e.g., `'("\\*scratch\\*")`, the `*scratch*` buffer is offered for switching even when you're in a project. This, too, moves you out of the project, of course.
-
+`nswbuff` provides some very simple but nifty integration with the project-management packages `project.el` (built-in) and [`projectile`](http://batsov.com/projectile). If you set `nswbuff-buffer-list-function` to `nswbuff-project-buffer-list` or  `nswbuff-projectile-buffer-list`, only the buffers belonging to the current project are offered for switching.  This makes for a very light-weight (but in my opinion effective) alternative to such modes as [`perspective.el`](https://github.com/nex3/perspective-el) or [`persp-mode`](https://github.com/Bad-ptr/persp-mode.el). Switching buffers with `nswbuff` keeps you in the project, any other buffer-switching method (`switch-to-buffer`, but also 3rd-party options such as ivy or helm) is not affected and can thus be used to move out of the project.
 
 
 ## `golden-ratio` / `zoom` ##
